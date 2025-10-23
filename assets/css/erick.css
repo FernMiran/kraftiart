@@ -1,0 +1,21 @@
+.page-header.inner-header-opacity {
+	margin: 0 0 0!important;
+}
+#primary {
+    margin-top: 0px!important;
+}
+.theiaStickySidebar{
+    padding-top: 12px!important;
+}
+.grid-item{
+    margin: 40px 0 0 0!important;
+}
+.single-product .single-product-thumbnail .images {
+    max-height: 100%!important;
+}
+#nickx-gallery{
+    display: none!important;
+}
+.thumbnail-slider-style2 .single-product-thumbnail .product-360-slider-wrap {
+    float: left!important;
+}

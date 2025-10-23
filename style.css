@@ -1,0 +1,765 @@
+/*!
+Theme Name: Kraftiart
+Author: templatetrip
+Description: Themes & Templates For All Platforms
+Version: 1.0.0
+License: GNU General Public License v2 or later
+License URI: LICENSE
+Text Domain: kraftiart
+Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned.
+
+Kraftiart is based on Templatetrip https://www.templatetrip.com/, (C) 2012-2020 Automattic, Inc.
+templatetrip is distributed under the terms of the GNU GPL v2 or later.
+
+Normalizing styles have been helped along thanks to the fine work of
+Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
+*/
+
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+# Generic
+	- Normalize
+	- Box sizing
+# Base
+	- Typography
+	- Elements
+	- Links
+	- Forms
+## Layouts
+# Components
+	- Navigation
+	- Posts and pages
+	- Comments
+	- Widgets
+	- Media
+	- Captions
+	- Galleries
+# plugins
+	- Jetpack infinite scroll
+# Utilities
+	- Accessibility
+	- Alignments
+
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+# Generic
+--------------------------------------------------------------*/
+
+/* Normalize
+--------------------------------------------- */
+
+/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+
+
+/* Accessibility
+--------------------------------------------- */
+
+/* Text meant only for screen readers. */
+.screen-reader-text {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute !important;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+.screen-reader-text:focus {
+	background-color: #f1f1f1;
+	border-radius: 3px;
+	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+	clip: auto !important;
+	clip-path: none;
+	color: #21759b;
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 700;
+	height: auto;
+	left: 5px;
+	line-height: normal;
+	padding: 15px 23px 14px;
+	text-decoration: none;
+	top: 5px;
+	width: auto;
+	z-index: 100000;
+}
+
+
+
+/* Alignments
+--------------------------------------------- */
+.alignleft {
+
+	/*rtl:ignore*/
+	float: left;
+
+	/*rtl:ignore*/
+	margin-right: 1.5em;
+	margin-bottom: 1.5em;
+}
+
+.alignright {
+
+	/*rtl:ignore*/
+	float: right;
+
+	/*rtl:ignore*/
+	margin-left: 1.5em;
+	margin-bottom: 1.5em;
+}
+
+.aligncenter {
+	clear: both;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 1.5em;
+}
+
+
+/* Captions
+--------------------------------------------- */
+.wp-caption {
+	margin-bottom: 1.5em;
+	max-width: 100%;
+}
+
+.wp-caption img[class*="wp-image-"] {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.wp-caption .wp-caption-text {
+	margin: 0.8075em 0;
+}
+
+.wp-caption-text {
+	text-align: center;
+}
+
+/* Galleries
+--------------------------------------------- */
+.gallery {
+	margin-bottom: 1.5em;
+	display: grid;
+	grid-gap: 1.5em;
+}
+
+.gallery-item {
+	display: inline-block;
+	text-align: center;
+	width: 100%;
+}
+
+.gallery-columns-2 {
+	grid-template-columns: repeat(2, 1fr);
+}
+
+.gallery-columns-3 {
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.gallery-columns-4 {
+	grid-template-columns: repeat(4, 1fr);
+}
+
+.gallery-columns-5 {
+	grid-template-columns: repeat(5, 1fr);
+}
+
+.gallery-columns-6 {
+	grid-template-columns: repeat(6, 1fr);
+}
+
+.gallery-columns-7 {
+	grid-template-columns: repeat(7, 1fr);
+}
+
+.gallery-columns-8 {
+	grid-template-columns: repeat(8, 1fr);
+}
+
+.gallery-columns-9 {
+	grid-template-columns: repeat(9, 1fr);
+}
+
+.gallery-caption {
+	display: block;
+}
+
+.elementor-367 .elementor-element.elementor-element-615b620 .elementor-heading-title {
+    color: #f7c6d8!important;
+    font-family: "Trirong", Sans-serif;
+    font-size: 80px !important;
+}
+
+.swiper-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    transition-property: transform;
+    box-sizing: content-box;
+    display: flex!important;
+    justify-content: center!important;
+}
+
+
+/*Home */
+ 
+
+/*Carrusel de atencion */
+
+.site-main {
+    padding-bottom: 0!important;
+}
+.elementor-17 .elementor-element.elementor-element-549996cd .elementor-button { 
+    color: white !important;
+}
+
+.elementor-17 .elementor-element.elementor-element-549996cd .elementor-button:hover { 
+    color: #34373f !important;
+}
+
+.page .site-main a.btn.btn-primary {
+    color: white!important;
+}
+
+.page .site-main a.btn.btn-primary:hover {
+    color: #000!important;
+}
+
+
+@media(max-width:940px){
+    
+    .tt-portfolio-thumbnail span {
+    color: var(--color-text);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+    
+    .elementor-367 .elementor-element.elementor-element-39255c9 .tt-section-title .section-heading,
+    .elementor-367 .elementor-element.elementor-element-39255c9 .tt-section-title p{
+    text-align: center!important;
+}
+    
+    .elementor-17 .elementor-element.elementor-element-16e89804 {
+    padding: 10px 12px 10px 0px!important;
+}
+    
+    section.elementor-section.elementor-section-boxed>.elementor-container {
+    display: flex;
+    flex-direction: column!important;
+    justify-content: center!important;
+    align-items: center!important;
+    overflow: hidden!important;
+    max-width: 100%!important;
+}
+
+.elementor-17 .elementor-element.elementor-element-11dac5f .tt-section-title .section-heading {
+    font-size: 27px!important;
+    line-height: 27px;
+    letter-spacing: normal!important;
+    margin-top: 15px !important;
+}
+    
+    .swiper-wrapper.atention {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex !important;
+    transition-property: transform;
+    box-sizing: content-box;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tt-feature-box-icon::before {
+    left: 0;
+    right: 0;
+    display: none!important;
+}
+
+.tt-feature-box-icon {
+    left: 40% !important;
+}
+
+.elementor-17 .elementor-element.elementor-element-ff1e54b .elementor-button {
+    font-size: 14px;
+    padding: 12px 28px 12px 28px;
+    display: flex;
+    justify-content: center;
+    width: 80%;
+    margin: auto;
+}
+
+.section-heading{ 
+    float: none; 
+}
+
+ 
+
+.section-heading.percent_70{
+    font-weight: 500;
+    font-size: 40px;
+    float: none;
+    width: 80% !important;
+    color: var(--secondary-bg-color);
+    line-height: 48px;
+    margin: auto !important;
+    text-align: center;
+}
+
+.elementor-17 .elementor-element.elementor-element-aba8a1b .tt-section-title .section-heading {
+    font-family: "Beau Rivage", Sans-serif;
+    font-size: 50px;
+    letter-spacing: 3.4px;
+    text-align: center!important;
+    margin-top: 23px !important;
+}
+
+.elementor-17 .elementor-element.elementor-element-ad20e1c .tt-section-title .section-heading {
+    text-align: center;
+    margin-top: 10px !important;
+}
+
+.elementor-17 .elementor-element.elementor-element-c54f320 .tt-section-title .section-heading, .elementor-17 .elementor-element.elementor-element-83d6d45 .tt-section-title .section-heading {
+    font-family: "Beau Rivage", Sans-serif;
+    font-size: 40px;
+    letter-spacing: 3.1px;
+    text-align: center;
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+    line-height: 1;
+}
+
+.elementor-17 .elementor-element.elementor-element-7651d848 .tt-section-title .section-heading {
+    font-size: 35px !important;
+    line-height: 35px !important;
+    text-align: center;
+    margin-top: 10px !important;
+}
+
+.elementor-17 .elementor-element.elementor-element-7651d848 .tt-section-title .tt-section-sab {
+    display: flex;
+    justify-content: center;
+}
+
+.elementor-17 .elementor-element.elementor-element-a7ff31d .elementor-heading-title {
+    text-align: center!important;
+}
+
+.elementor-17 .elementor-element.elementor-element-549996cd .elementor-button {
+    font-size: 14px;
+    padding: 12px 28px 12px 28px;
+    width: 100%!important;
+    color: white !important;
+}
+
+.elementor-17 .elementor-element.elementor-element-549996cd .elementor-button:hover {
+    font-size: 14px;
+    padding: 12px 28px 12px 28px;
+    width: 100%!important;
+    color: #34373f !important;
+}
+
+ 
+.elementor-17 .elementor-element.elementor-element-748c861 .tt-section-title .section-heading {
+    font-family: "Beau Rivage", Sans-serif;
+    font-size: 50px;
+    letter-spacing: 4.4px;
+    text-align: center;
+    width: 100%;
+    /* margin: auto !important; */
+    line-height: 1;
+}
+
+.elementor-17 .elementor-element.elementor-element-06d5b06 > .elementor-element-populated {
+    margin: 40px 0px 40px 0px!important; 
+}
+
+.elementor-17 .elementor-element.elementor-element-7664be18 {
+    margin-top: 40px!important;
+    margin-bottom: 40px!important;
+    padding: 0px 0px 0px 0px;
+}
+
+.elementor-17 .elementor-element.elementor-element-71751c8 .tt-section-title .section-heading {
+    text-align: center!important;
+    margin-top: 10px !important;
+}
+
+.elementor-17 .elementor-element.elementor-element-e7af1a4 .tt-section-title .section-heading {
+    font-family: "Beau Rivage", Sans-serif;
+    font-size: 50px;
+    letter-spacing: 4.4px;
+    text-align: center;
+    margin-top: 40px !important;
+}
+
+.elementor-17 .elementor-element.elementor-element-8004d8c {
+    padding: 0px 12px 0px 12px;
+    margin-bottom: 40px!important;
+    margin-top: 40px!important;
+}
+
+.elementor-17 .elementor-element.elementor-element-b82109d .tt-section-title .section-heading {
+    text-align: center;
+    margin-top: 30px !important;
+}
+
+.elementor-17 .elementor-element.elementor-element-12bf15f > .elementor-element-populated {
+    
+    margin-top: 40px!important;
+    margin-bottom: 40px!important;
+}
+
+.swiper-slide {
+    flex-shrink: 0;
+    width: 85% !important;
+    height: 100%;
+    position: relative;
+    transition-property: transform;
+}
+
+.elementor-17 .elementor-element.elementor-element-5e80b72a:not(.elementor-motion-effects-element-type-background), .elementor-17 .elementor-element.elementor-element-5e80b72a > .elementor-motion-effects-container > .elementor-motion-effects-layer {
+ 
+    padding: 60px 0!important;
+}
+
+.elementor-17 .elementor-element.elementor-element-30399d2 .tt-section-title .section-heading {
+    font-size: 40px!important;
+    text-align: center!important;
+}
+
+
+}
+
+.post-excerpt ol, .post-excerpt ul {
+    padding-left: 20px;
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.elementor-17 .elementor-element.elementor-element-ed287e3 > .elementor-widget-container {
+    margin: 40px 0px 0px 0px!important;
+}
+
+.elementor-410 .elementor-element.elementor-element-067b790 > .elementor-container {
+    max-width: 1650px;
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
+
+.elementor-5274 .elementor-element.elementor-element-6534ca1:not(.elementor-motion-effects-element-type-background) > .elementor-widget-wrap, .elementor-5274 .elementor-element.elementor-element-6534ca1 > .elementor-widget-wrap > .elementor-motion-effects-container > .elementor-motion-effects-layer {
+    background-color: #f7c6d8!important;
+}
+
+.product-layout-morden .product .cart-wrap a {
+    color: white !important;
+}
+
+.elementor-17 .elementor-element.elementor-element-44a6146:not(.elementor-motion-effects-element-type-background), .elementor-17 .elementor-element.elementor-element-44a6146 > .elementor-motion-effects-container > .elementor-motion-effects-layer {
+    background-image: url(https://cheja.clicme.marketing/wp-content/uploads/2024/02/bg-blog.png);
+    background-size: 100% 100%!important;
+}
+
+ 	    :root {
+  --fuente-cursiva: 'Beau Rivage', sans-serif!important;
+}
+
+
+
+/* Estilos para la lista de categorías */
+.wc-block-product-categories-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilos para los ítems de la lista de categorías */
+.wc-block-product-categories-list-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Ajustar el espacio entre ítems según necesites */
+}
+
+/* Estilos para el nombre de la categoría */
+.wc-block-product-categories-list-item__name {
+    flex-grow: 1;
+    margin-right: 8px; /* Espacio entre el nombre y el conteo */
+}
+
+/* Estilos para el conteo de productos */
+.wc-block-product-categories-list-item-count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto; /* Asegura que el conteo se alinee a la derecha */
+}
+
+
+.tt-portfolio-thumbnail span {
+    color: var(--color-text);
+    line-height: 0;
+    margin: 25px 0;
+    /* width: 100%; */
+    /* position: relative; */
+    display: flex;
+    justify-content: center;
+}
+
+ul.page-breadcrumb {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: right;
+}
+
+product .price .amount bdi, .product .price ins{
+    font-size: 5px!important;
+}
+
+/* Mobile Gallery Styles - Add to your theme's style.css or custom CSS */
+
+/* ============================================
+   MOBILE STATIC GALLERY STYLES
+   ============================================ */
+
+@media (max-width: 767px) {
+    
+    /* Main gallery container */
+    .mobile-static-gallery {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+    
+    /* Remove all slick slider positioning */
+    .mobile-static-gallery .nslick-list,
+    .mobile-static-gallery .nslick-track {
+        display: block !important;
+        height: auto !important;
+        width: 100% !important;
+        transform: none !important;
+        position: relative !important;
+        overflow: visible !important;
+    }
+    
+    /* Stack images vertically */
+    .mobile-static-gallery > div,
+    .mobile-static-gallery .nslick-slide {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        float: none !important;
+        position: relative !important;
+        opacity: 1 !important;
+        margin-bottom: 15px !important;
+        overflow: visible !important;
+    }
+    
+    /* Remove slider-specific attributes */
+    .mobile-static-gallery .nslick-slide[aria-hidden="true"] {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    /* Image styling */
+    .mobile-static-gallery img {
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        margin: 0 auto 15px !important;
+        border-radius: 8px;
+    }
+    
+    /* Remove zoom overlay effects */
+    .mobile-static-gallery .zoomImg {
+        display: none !important;
+    }
+    
+    /* Disable hover effects on mobile */
+    .mobile-static-gallery a.nickx-popup,
+    .mobile-static-gallery .zoom {
+        pointer-events: none !important;
+    }
+    
+    /* Gallery container adjustments */
+    .single-product .single-product-thumbnail .images {
+        overflow: visible !important;
+        max-height: none !important;
+        height: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+    }
+    
+    /* Product image wrapper */
+    .single-product .product-360-slider-wrap {
+        overflow: visible !important;
+        height: auto !important;
+    }
+    
+    /* Hide slider navigation */
+    .nslick-arrow,
+    .nslick-dots,
+    .nslick-prev,
+    .nslick-next,
+    .product-popup-wrap,
+    .slider-popup-wrap {
+        display: none !important;
+    }
+    
+    /* Remove sticky sidebar on mobile */
+    .single-product-detail {
+        position: relative !important;
+        top: auto !important;
+        margin-top: 20px;
+    }
+    
+    /* Ensure proper spacing */
+    .single-product-thumb {
+        margin-bottom: 20px;
+    }
+    
+    /* Layout adjustments */
+    .single-product-thumb-content {
+        flex-direction: column !important;
+    }
+    
+    .single-product-thumb,
+    .single-product-detail {
+        max-width: 100% !important;
+        flex: none !important;
+        padding: 0 15px;
+    }
+    
+    /* Smooth scrolling for gallery */
+    .single-product-thumbnail {
+        scroll-behavior: smooth;
+    }
+    
+    /* Loading optimization */
+    .mobile-static-gallery img {
+        loading: eager;
+    }
+}
+
+/* ============================================
+   MOBILE ADD TO CART BUTTON FIXES
+   ============================================ */
+
+@media (max-width: 767px) {
+    
+    /* Ensure cart section is visible */
+    .single-product .summary .woocommerce-variation-add-to-cart,
+    .single-product .summary .cart,
+    .single-product .summary form.cart {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Hide buy now buttons */
+    .button-buy-now,
+    .single_add_to_cart_button.button-buy-now,
+    .woocommerce-variation-add-to-cart .button-buy-now {
+        display: none !important;
+    }
+    
+    /* Style add to cart button */
+    .single-product .summary .single_add_to_cart_button {
+        display: block !important;
+        width: 100% !important;
+        padding: 15px 20px !important;
+        font-size: 16px !important;
+        margin-top: 15px !important;
+        border-radius: 6px !important;
+        background-color: #a63854 !important;
+        color: white !important;
+        border: none !important;
+        text-transform: uppercase !important;
+        font-weight: 600 !important;
+        min-height: 48px !important;
+        touch-action: manipulation !important;
+    }
+    
+    /* Quantity input */
+    .single-product .summary .cart .quantity {
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    
+    .single-product .summary .cart .quantity input.qty {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 16px;
+        border: 2px solid #e5e5e5;
+        border-radius: 6px;
+        text-align: center;
+        min-height: 48px;
+    }
+}
+
+/* ============================================
+   SMALL MOBILE DEVICES (< 480px)
+   ============================================ */
+
+@media (max-width: 480px) {
+    
+    /* Tighter image spacing */
+    .mobile-static-gallery > div,
+    .mobile-static-gallery .nslick-slide {
+        margin-bottom: 10px !important;
+    }
+    
+    .mobile-static-gallery img {
+        margin-bottom: 10px !important;
+    }
+    
+    /* Adjust button sizing */
+    .single-product .summary .single_add_to_cart_button {
+        padding: 12px 18px !important;
+        font-size: 14px !important;
+    }
+    
+    /* Container padding */
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+/* ============================================
+   TABLET AND UP (Desktop restoration)
+   ============================================ */
+
+@media (min-width: 768px) {
+    
+    /* Ensure slider functionality is restored */
+    .mobile-static-gallery {
+        display: block;
+    }
+    
+    /* Show slider navigation */
+    .nslick-arrow,
+    .nslick-dots,
+    .product-popup-wrap {
+        display: block;
+    }
+}

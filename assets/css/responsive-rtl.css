@@ -1,0 +1,165 @@
+/*
+    Responsive Custom - RTL CSS
+*/
+
+
+/* about us */
+
+/* @media(max-width:1199px) {
+	.rtl .aboutus-cms .cms-img.cms-img-01 {
+		right: -50%;
+	}
+
+	.rtl .aboutus-cms .cms-img.cms-img-02 {
+		left: -15%;
+	}
+}
+ */
+
+@media(min-width:992px) {
+	.rtl #mega-menu-wrap-header-menu #mega-menu-header-menu li.mega-menu-flyout li.mega-menu-item a.mega-menu-link>span.mega-indicator::after {
+		transform: rotate(180deg);
+		margin: 0;
+	}
+
+	.rtl .site-header ul#hamburger-menu li a::after {
+		right: 0;
+		left: auto;
+	}
+
+	.rtl .site-header #site-navigation ul.nav-menu li.menu-item.menu-item-has-children>a {
+		padding: 5px 18px 5px 45px;
+	}
+
+	.rtl .site-header #site-navigation ul.nav-menu li.menu-item.menu-item-has-children>a::before {
+		left: 25px;
+		right: auto;
+	}
+
+	.rtl .site-header #site-navigation ul.nav-menu li.menu-item ul.sub-menu li.menu-item:hover>ul {
+		right: 100%;
+		left: auto;
+	}
+
+	/* 
+	.rtl .product-layout-default section.product .quantity {
+		transform: translateX(-100%);
+		-webkit-transform: translateX(-100%);
+		-moz-transform: translateX(-100%);
+		-o-transform: translateX(-100%);
+		-ms-transform: translateX(-100%);
+	} */
+
+	/* 	.rtl .product-layout-default section.product .product-button {
+		transform: translateX(110px);
+		-webkit-transform: translateX(110px);
+		-moz-transform: translateX(110px);
+		-o-transform: translateX(110px);
+		-ms-transform: translateX(110px);
+	} */
+}
+
+
+
+@media(max-width:1400px) {
+	body.rtl .elementor-36 .elementor-element-populated .elementor-element.elementor-element-7eb6ce02 {
+		right: -190px !important;
+		left: auto;
+	}
+
+	body.rtl .elementor-94 .elementor-element-populated .elementor-element.elementor-element-74b2aec3 {
+		right: -150px !important;
+		left: auto;
+	}
+}
+
+@media (max-width: 991px) {
+	.rtl #mega-menu-wrap-header-menu #mega-menu-header-menu>li.mega-menu-item>a.mega-menu-link {
+		text-align: right;
+	}
+
+	#mega-menu-wrap-header-menu #mega-menu-header-menu li.mega-menu-item-has-children>a.mega-menu-link>span.mega-indicator {
+		float: left;
+	}
+
+	.rtl.single-product.thumbnail-slider-style1 .left-slider .summary.entry-summary {
+		padding-right: 0;
+		padding-left: 0;
+	}
+/* 
+	.rtl .header-style-1 .right-header .mini-cart {
+		margin: 0;
+	}
+ */
+	.rtl .mega-menu-header-menu .header-style-1.site-header #site-navigation {
+		margin: 0 !important;
+	}
+
+	.rtl footer .widget-wrap .widget .footer-click {
+		right: auto;
+		left: 0;
+	}
+}
+
+.rtl.woocommerce-active #primary .widget_block ul li .wc-block-components-checkbox label .wc-block-components-checkbox__input {
+	margin: 0 0 0 10px;
+}
+
+.rtl .wc-block-product-categories ul.wc-block-product-categories-list--depth-0 {
+	padding: 0 0 0 10px;
+}
+
+.rtl #primary .wc-blocks-filter-wrapper .wc-block-rating-filter ul li .wc-block-components-product-rating__stars {
+	width: 82px;
+	letter-spacing: 2px;
+}
+
+@media(max-width:767px) {
+	.rtl .product-top-sorting .select-wrap select {
+		padding: 3px 5px 5px 10px;
+	}
+
+	.rtl .product-top-sorting .woocommerce-ordering {
+		margin: 0 0 0 5px;
+	}
+
+	.rtl .product-top-sorting .woocommerce-result-count {
+		margin: 0 0 0 5px;
+	}
+
+	.rtl .product-top-sorting .toggle-filter {
+		margin: 0 5px 0 0;
+	}
+
+	.rtl .full-sidebar .product-top-sorting .product-sort-view,
+	.rtl .offsidebar-left .product-top-sorting .product-sort-view,
+	.rtl .offsidebar-right .product-top-sorting .product-sort-view {
+		margin: 0 0 0 13px;
+	}
+
+	.rtl .product-top-sorting .woocommerce-perpage .select-wrap::after {
+		left: 5px;
+		right: auto;
+	}
+
+	.rtl .select-wrap::after {
+		right: auto;
+		left: 13px;
+	}
+}
+
+@media(max-width:480px) {
+	.rtl .product-top-sorting .woocommerce-result-count {
+		margin: 0 0 5px 5px;
+	}
+
+	.rtl .full-sidebar .product-top-sorting .product-sort-view,
+	.rtl .offsidebar-left .product-top-sorting .product-sort-view,
+	.rtl .offsidebar-right .product-top-sorting .product-sort-view {
+		margin: 0 0 5px 13px;
+	}
+
+	/* .rtl .header-style-1 .right-header .mini-cart .dropdown-back .minicart-price {
+		padding: 0 63px 0 0;
+	} */
+}
