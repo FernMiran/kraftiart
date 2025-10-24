@@ -714,6 +714,48 @@ if ( post_password_required() ) {
 
 
  
+.kraftiart-static-gallery {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.kraftiart-static-gallery__badge {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 5;
+}
+
+.kraftiart-static-gallery__primary,
+.kraftiart-static-gallery__item {
+    margin: 0;
+}
+
+.kraftiart-static-gallery__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+}
+
+.kraftiart-static-gallery__secondary {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+@media(max-width: 767px){
+    .kraftiart-static-gallery {
+        gap: 16px;
+    }
+
+    .kraftiart-static-gallery__secondary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 
 </style>
 
@@ -727,16 +769,64 @@ if ( post_password_required() ) {
 		?>
 		<div class="col-12 col-md-7 <?php echo esc_attr( $sticky_content ); ?> single-product-thumb">
 			<div class="single-product-thumbnail">
-				<?php
-				/**
-				 * Hook: woocommerce_before_single_product_summary.
-				 *
-				 * @hooked woocommerce_show_product_sale_flash - 10
-				 * @hooked woocommerce_show_product_images - 20
-				 */
-				// do_action('woocommerce_single_shop_item');
-				do_action( 'woocommerce_before_single_product_summary' );
-				?>
+                <?php
+                $gallery_image_ids = array();
+                if ( $product && is_a( $product, 'WC_Product' ) ) {
+                    $featured_image_id = $product->get_image_id();
+                    if ( $featured_image_id ) {
+                        $gallery_image_ids[] = $featured_image_id;
+                    }
+                    $additional_images = $product->get_gallery_image_ids();
+                    if ( ! empty( $additional_images ) ) {
+                        $gallery_image_ids = array_merge( $gallery_image_ids, $additional_images );
+                    }
+                }
+
+                $gallery_image_ids = array_values( array_unique( array_filter( $gallery_image_ids ) ) );
+                $primary_image_id = $gallery_image_ids ? array_shift( $gallery_image_ids ) : 0;
+
+                $badge_markup = '';
+                if ( has_action( 'woocommerce_before_single_product_summary_pl' ) ) {
+                    ob_start();
+                    do_action( 'woocommerce_before_single_product_summary_pl' );
+                    $badge_markup = trim( ob_get_clean() );
+                }
+                ?>
+                <div class="kraftiart-static-gallery single-product-image">
+                    <?php if ( $badge_markup ) : ?>
+                        <div class="kraftiart-static-gallery__badge"><?php echo $badge_markup; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
+                    <?php endif; ?>
+                    <div class="kraftiart-static-gallery__primary">
+                        <?php
+                        if ( $primary_image_id ) {
+                            echo wp_get_attachment_image( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                $primary_image_id,
+                                'woocommerce_single',
+                                false,
+                                array(
+                                    'class'   => 'kraftiart-static-gallery__image',
+                                    'loading' => 'eager',
+                                )
+                            );
+                        } else {
+                            echo sprintf(
+                                '<img src="%1$s" alt="%2$s" class="kraftiart-static-gallery__image" />',
+                                esc_url( wc_placeholder_img_src() ),
+                                esc_attr__( 'Awaiting product image', 'woocommerce' )
+                            );
+                        }
+                        ?>
+                    </div>
+                    <?php if ( ! empty( $gallery_image_ids ) ) : ?>
+                        <div class="kraftiart-static-gallery__secondary">
+                            <?php foreach ( $gallery_image_ids as $image_id ) : ?>
+                                <figure class="kraftiart-static-gallery__item">
+                                    <?php echo wp_get_attachment_image( $image_id, 'woocommerce_thumbnail', false, array( 'class' => 'kraftiart-static-gallery__image', 'loading' => 'lazy' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                </figure>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
 			</div>
 		</div>
 		
@@ -821,50 +911,32 @@ if ( post_password_required() ) {
 				
 				<script>
 	    document.addEventListener('DOMContentLoaded', function() {
-  var select = document.getElementById('pa_medidas');
+	  var select = document.getElementById('pa_medidas');
 
-  // Función para cambiar el color de fondo al hacer hover
-  function hoverBackgroundColor(event) {
-    // Solo aplicar el estilo si el evento es disparado por una opción del select
-    if (event.target.tagName === 'OPTION') {
-      event.target.style.backgroundColor = '#f0f0f0'; // Color gris tenue
-    }
-  }
+	  if (!select) {
+	    return;
+	  }
 
-  // Función para restablecer el color de fondo cuando el mouse deja la opción
-  function resetBackgroundColor(event) {
-    if (event.target.tagName === 'OPTION') {
-      event.target.style.backgroundColor = ''; // Restablecer al estilo predeterminado
-    }
-  }
+	  function hoverBackgroundColor(event) {
+	    if (event.target.tagName === 'OPTION') {
+	      event.target.style.backgroundColor = '#f0f0f0';
+	    }
+	  }
 
-  // Agregar evento de hover a todas las opciones
-  Array.from(select.options).forEach(function(option) {
-    option.addEventListener('mouseover', hoverBackgroundColor);
-    option.addEventListener('mouseout', resetBackgroundColor);
-  });
-});
+	  function resetBackgroundColor(event) {
+	    if (event.target.tagName === 'OPTION') {
+	      event.target.style.backgroundColor = '';
+	    }
+	  }
 
-//Desaparecer los cuadros al bajar
-window.addEventListener("scroll", function() {
-  let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-  let totalHeight = document.documentElement.scrollHeight; // Altura total del documento
-  let windowHeight = window.innerHeight; // Altura de la ventana del navegador
-  let halfHeight = (totalHeight - windowHeight) / 2; // Calcula la mitad del contenido que se puede hacer scroll
+	  Array.prototype.forEach.call(select.options, function(option) {
+	    option.addEventListener('mouseover', hoverBackgroundColor);
+	    option.addEventListener('mouseout', resetBackgroundColor);
+	  });
+	});
 
-  if (currentScroll > halfHeight) {
-    // Si el scroll actual ha superado la mitad de la altura total del documento
-    document.getElementById('nickx-gallery').style.visibility = 'hidden';
-    document.getElementById('nickx-gallery').style.opacity = '0';
-  } else {
-    // Si el scroll actual es menor que la mitad de la altura total del documento
-    document.getElementById('nickx-gallery').style.visibility = 'visible';
-    document.getElementById('nickx-gallery').style.opacity = '1';
-  }
-}, false);
-
-// TRaducir
-jQuery(document).ready(function($) {
+	// Traducir
+	jQuery(document).ready(function($) {
   // Cambia "Estimated Delivery" a "Entrega Estimada"
    // Cambia "Estimated Delivery" a "<span>Env��o (estimado)</span>"
   $('.estimated-delivery').each(function() {
