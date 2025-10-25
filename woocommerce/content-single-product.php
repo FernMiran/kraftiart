@@ -733,17 +733,45 @@ if ( post_password_required() ) {
     margin: 0;
 }
 
+
 .kraftiart-static-gallery__image {
     width: 100%;
-    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
     display: block;
     border-radius: 8px;
+    max-width: 100%;
+    height: auto;
+    background: #f7f7f7;
 }
+
 
 .kraftiart-static-gallery__secondary {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 12px;
+}
+
+@media(max-width: 767px){
+    .kraftiart-static-gallery {
+        gap: 16px;
+    }
+
+    .kraftiart-static-gallery__secondary {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .kraftiart-static-gallery__item {
+        width: 100%;
+    }
+    .kraftiart-static-gallery__image {
+        aspect-ratio: 1/1;
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        object-fit: cover;
+    }
 }
 
 @media(max-width: 767px){
