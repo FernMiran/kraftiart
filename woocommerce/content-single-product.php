@@ -787,6 +787,60 @@ if ( post_password_required() ) {
 
 </style>
 
+<style>
+.kraftiart-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.85);
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+.kraftiart-modal.open {
+    display: flex;
+}
+.kraftiart-modal__img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    background: #fff;
+}
+.kraftiart-modal__close {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    font-size: 2.5rem;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 10001;
+    line-height: 1;
+    padding: 0 12px;
+    transition: color 0.2s;
+}
+.kraftiart-modal__close:hover {
+    color: #a63854;
+}
+@media (max-width: 767px) {
+    .kraftiart-modal__img {
+        max-width: 98vw;
+        max-height: 80vh;
+    }
+    .kraftiart-modal__close {
+        top: 12px;
+        right: 12px;
+        font-size: 2rem;
+    }
+}
+</style>
+
 <div id="product-<?php the_ID(); ?>" <?php wc_product_class( '', $product ); ?>>
 
 <div class="container">
@@ -827,15 +881,15 @@ if ( post_password_required() ) {
                     <div class="kraftiart-static-gallery__primary">
                         <?php
                         if ( $primary_image_id ) {
-                            echo wp_get_attachment_image( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-                                $primary_image_id,
-                                'woocommerce_single',
-                                false,
-                                array(
-                                    'class'   => 'kraftiart-static-gallery__image',
-                                    'loading' => 'eager',
-                                )
-                            );
+                            $img_html = wp_get_attachment_image( $primary_image_id, 'woocommerce_single', false, array(
+                                'class'   => 'kraftiart-static-gallery__image',
+                                'loading' => 'eager',
+                                'data-full' => esc_url( wp_get_attachment_url( $primary_image_id ) ),
+                                'tabindex' => '0',
+                                'role' => 'button',
+                                'aria-label' => esc_attr__( 'Ver imagen grande', 'kraftiart' ),
+                            ) );
+                            echo $img_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         } else {
                             echo sprintf(
                                 '<img src="%1$s" alt="%2$s" class="kraftiart-static-gallery__image" />',
@@ -849,11 +903,27 @@ if ( post_password_required() ) {
                         <div class="kraftiart-static-gallery__secondary">
                             <?php foreach ( $gallery_image_ids as $image_id ) : ?>
                                 <figure class="kraftiart-static-gallery__item">
-                                    <?php echo wp_get_attachment_image( $image_id, 'woocommerce_thumbnail', false, array( 'class' => 'kraftiart-static-gallery__image', 'loading' => 'lazy' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                    <?php
+                                    $img_html = wp_get_attachment_image( $image_id, 'woocommerce_thumbnail', false, array(
+                                        'class' => 'kraftiart-static-gallery__image',
+                                        'loading' => 'lazy',
+                                        'data-full' => esc_url( wp_get_attachment_url( $image_id ) ),
+                                        'tabindex' => '0',
+                                        'role' => 'button',
+                                        'aria-label' => esc_attr__( 'Ver imagen grande', 'kraftiart' ),
+                                    ) );
+                                    echo $img_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                    ?>
                                 </figure>
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
+                </div>
+
+                <!-- Modal for image zoom -->
+                <div class="kraftiart-modal" id="kraftiartModal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+                  <button class="kraftiart-modal__close" id="kraftiartModalClose" aria-label="Cerrar">&times;</button>
+                  <img src="" alt="" class="kraftiart-modal__img" id="kraftiartModalImg" />
                 </div>
 			</div>
 		</div>
@@ -937,34 +1007,81 @@ if ( post_password_required() ) {
 					</div>
 				</div>
 				
-				<script>
-	    document.addEventListener('DOMContentLoaded', function() {
-	  var select = document.getElementById('pa_medidas');
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Modal image zoom (desktop only)
+                    function isDesktop() {
+                        return window.innerWidth > 767;
+                    }
+                    var modal = document.getElementById('kraftiartModal');
+                    var modalImg = document.getElementById('kraftiartModalImg');
+                    var modalClose = document.getElementById('kraftiartModalClose');
 
-	  if (!select) {
-	    return;
-	  }
+                    function openModal(src, alt) {
+                        if (!isDesktop()) return;
+                        modalImg.src = src;
+                        modalImg.alt = alt || '';
+                        modal.classList.add('open');
+                        modal.style.display = 'flex';
+                        document.body.style.overflow = 'hidden';
+                        modal.focus();
+                    }
+                    function closeModal() {
+                        modal.classList.remove('open');
+                        modal.style.display = 'none';
+                        modalImg.src = '';
+                        document.body.style.overflow = '';
+                    }
+                    // Click on image
+                    document.querySelectorAll('.kraftiart-static-gallery__image').forEach(function(img) {
+                        img.addEventListener('click', function(e) {
+                            if (!isDesktop()) return;
+                            var src = img.getAttribute('data-full') || img.src;
+                            var alt = img.getAttribute('alt') || '';
+                            openModal(src, alt);
+                        });
+                        img.addEventListener('keydown', function(e) {
+                            if (!isDesktop()) return;
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                var src = img.getAttribute('data-full') || img.src;
+                                var alt = img.getAttribute('alt') || '';
+                                openModal(src, alt);
+                            }
+                        });
+                    });
+                    // Close modal
+                    modalClose.addEventListener('click', closeModal);
+                    modal.addEventListener('click', function(e) {
+                        if (e.target === modal) closeModal();
+                    });
+                    document.addEventListener('keydown', function(e) {
+                        if (modal.classList.contains('open') && (e.key === 'Escape' || e.key === 'Esc')) {
+                            closeModal();
+                        }
+                    });
 
-	  function hoverBackgroundColor(event) {
-	    if (event.target.tagName === 'OPTION') {
-	      event.target.style.backgroundColor = '#f0f0f0';
-	    }
-	  }
+                    // pa_medidas hover
+                    var select = document.getElementById('pa_medidas');
+                    if (select) {
+                        function hoverBackgroundColor(event) {
+                            if (event.target.tagName === 'OPTION') {
+                                event.target.style.backgroundColor = '#f0f0f0';
+                            }
+                        }
+                        function resetBackgroundColor(event) {
+                            if (event.target.tagName === 'OPTION') {
+                                event.target.style.backgroundColor = '';
+                            }
+                        }
+                        Array.prototype.forEach.call(select.options, function(option) {
+                            option.addEventListener('mouseover', hoverBackgroundColor);
+                            option.addEventListener('mouseout', resetBackgroundColor);
+                        });
+                    }
+                });
 
-	  function resetBackgroundColor(event) {
-	    if (event.target.tagName === 'OPTION') {
-	      event.target.style.backgroundColor = '';
-	    }
-	  }
-
-	  Array.prototype.forEach.call(select.options, function(option) {
-	    option.addEventListener('mouseover', hoverBackgroundColor);
-	    option.addEventListener('mouseout', resetBackgroundColor);
-	  });
-	});
-
-	// Traducir
-	jQuery(document).ready(function($) {
+                // Traducir
+                jQuery(document).ready(function($) {
   // Cambia "Estimated Delivery" a "Entrega Estimada"
    // Cambia "Estimated Delivery" a "<span>Env��o (estimado)</span>"
   $('.estimated-delivery').each(function() {
@@ -1046,12 +1163,9 @@ if ( post_password_required() ) {
 	
 			</div> 
 		<?php } ?>
-		<?php
-			/**
-			* Social Share
-			*/
-			do_action( 'kraftiart_social_share' );
-		?>
+           <?php
+               // Social Share removed as requested
+           ?>
 	</div>	
 </div>
 
