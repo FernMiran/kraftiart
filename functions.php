@@ -20,14 +20,6 @@ if ( ! defined( 'kraftiart_version' ) ) {
  * as indicating support for post thumbnails.
  */
 function kraftiart_setup() {
-	/*
-		* Make theme available for translation.
-		* Translations can be filed in the /languages/ directory.
-		* If you're building a theme based on kraftiart, use a find and replace
-		* to change 'kraftiart' to the name of your theme in all the template files.
-		*/
-	load_theme_textdomain( 'kraftiart', get_template_directory() . '/languages' );
-
 	// Add default posts and comments RSS feed links to head.
 	add_theme_support( 'automatic-feed-links' );
 
@@ -118,6 +110,21 @@ function kraftiart_setup() {
 	);
 }
 add_action( 'after_setup_theme', 'kraftiart_setup' );
+
+/**
+ * Load theme textdomain for translations.
+ * This is loaded on 'init' action to comply with WordPress 6.7.0+ requirements.
+ */
+function kraftiart_load_textdomain() {
+	/*
+		* Make theme available for translation.
+		* Translations can be filed in the /languages/ directory.
+		* If you're building a theme based on kraftiart, use a find and replace
+		* to change 'kraftiart' to the name of your theme in all the template files.
+		*/
+	load_theme_textdomain( 'kraftiart', get_template_directory() . '/languages' );
+}
+add_action( 'init', 'kraftiart_load_textdomain' );
 
 /**
  * Set the content width in pixels, based on the theme's design and stylesheet.

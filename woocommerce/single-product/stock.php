@@ -18,7 +18,18 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+// Ensure $product is a valid object
 global $product;
+
+if ( ! is_a( $product, 'WC_Product' ) ) {
+	$product = wc_get_product( get_the_ID() );
+}
+
+if ( ! $product ) {
+	return;
+}
+
 $stock = $product->get_stock_quantity();
 $available_stock = $stock ? $stock : 0 ;
 
