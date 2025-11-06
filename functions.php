@@ -1623,6 +1623,14 @@ function frame_carousel_simple_shortcode($atts) {
     </div>
     
     <style>
+    /* Force visibility on all devices - Debug */
+    .<?php echo esc_attr($carousel_id); ?> .frame-carousel-simple-nav {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 9999 !important;
+    }
+    
     .frame-carousel-simple-wrapper {
         position: relative;
         width: 100%;
@@ -1631,6 +1639,7 @@ function frame_carousel_simple_shortcode($atts) {
         padding: 0 16px 80px;
         margin: 0;
         background: transparent;
+        isolation: isolate;
     }
     
     .frame-carousel-simple-track {
@@ -1638,6 +1647,8 @@ function frame_carousel_simple_shortcode($atts) {
         transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         width: 100%;
         align-items: stretch;
+        position: relative;
+        z-index: 1;
     }
     
     .frame-slide-simple {
@@ -1660,6 +1671,7 @@ function frame_carousel_simple_shortcode($atts) {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border: 2px solid rgba(255, 255, 255, 0.8);
         height: 100%;
+        z-index: 1;
     }
     
     .frame-slide-simple-content:active {
@@ -1690,9 +1702,9 @@ function frame_carousel_simple_shortcode($atts) {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        z-index: 10;
+        z-index: 100 !important;
         padding: 0;
-        display: flex;
+        display: flex !important;
         justify-content: center;
         align-items: center;
         border: none;
@@ -1706,6 +1718,9 @@ function frame_carousel_simple_shortcode($atts) {
         outline: none;
         -webkit-tap-highlight-color: transparent;
         border: 2px solid rgba(255, 255, 255, 0.9);
+        pointer-events: auto;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .frame-carousel-simple-prev {
@@ -1722,10 +1737,11 @@ function frame_carousel_simple_shortcode($atts) {
     }
     
     .frame-carousel-simple-nav svg {
-        width: 22px;
-        height: 22px;
-        color: #fff;
-        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+        width: 22px !important;
+        height: 22px !important;
+        color: #fff !important;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)) !important;
+        display: block !important;
     }
     
     .frame-carousel-simple-dots {
@@ -1733,9 +1749,11 @@ function frame_carousel_simple_shortcode($atts) {
         bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
-        display: flex;
+        display: flex !important;
         gap: 8px;
-        z-index: 10;
+        z-index: 9999 !important;
+        pointer-events: auto;
+        visibility: visible !important;
     }
     
     .frame-carousel-simple-dot {
@@ -1773,22 +1791,25 @@ function frame_carousel_simple_shortcode($atts) {
     /* Mobile optimizations */
     @media (max-width: 767px) {
         .frame-carousel-simple-nav {
-            width: 40px;
-            height: 40px;
-            box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1);
+            width: 40px !important;
+            height: 40px !important;
+            box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
         
         .frame-carousel-simple-prev {
-            left: 8px;
+            left: 8px !important;
         }
         
         .frame-carousel-simple-next {
-            right: 8px;
+            right: 8px !important;
         }
         
         .frame-carousel-simple-nav svg {
-            width: 18px;
-            height: 18px;
+            width: 18px !important;
+            height: 18px !important;
         }
         
         .frame-carousel-simple-wrapper {
@@ -1839,21 +1860,24 @@ function frame_carousel_simple_shortcode($atts) {
         }
         
         .frame-carousel-simple-nav {
-            width: 36px;
-            height: 36px;
+            width: 36px !important;
+            height: 36px !important;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
         
         .frame-carousel-simple-prev {
-            left: 4px;
+            left: 4px !important;
         }
         
         .frame-carousel-simple-next {
-            right: 4px;
+            right: 4px !important;
         }
         
         .frame-carousel-simple-nav svg {
-            width: 16px;
-            height: 16px;
+            width: 16px !important;
+            height: 16px !important;
         }
     }
     </style>
@@ -1862,6 +1886,7 @@ function frame_carousel_simple_shortcode($atts) {
     (function() {
         function initFrameCarouselSimple() {
             const wrapper = document.querySelector('.<?php echo esc_js($carousel_id); ?>');
+            console.log('Simple Carousel: Wrapper found:', wrapper);
             if (!wrapper) return;
             
             const track = wrapper.querySelector('.frame-carousel-simple-track');
@@ -1869,6 +1894,10 @@ function frame_carousel_simple_shortcode($atts) {
             const prevBtn = wrapper.querySelector('.frame-carousel-simple-prev');
             const nextBtn = wrapper.querySelector('.frame-carousel-simple-next');
             const dotsContainer = wrapper.querySelector('.frame-carousel-simple-dots');
+            
+            console.log('Simple Carousel: Buttons found - Prev:', prevBtn, 'Next:', nextBtn);
+            console.log('Simple Carousel: Dots container:', dotsContainer);
+            console.log('Simple Carousel: Slides count:', slides.length);
             
             if (!track || slides.length === 0) return;
             
