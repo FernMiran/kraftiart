@@ -2063,3 +2063,591 @@ function frame_carousel_simple_shortcode($atts) {
     return ob_get_clean();
 }
 add_shortcode('frame_carousel_simple', 'frame_carousel_simple_shortcode');
+
+/**
+ * Frame Carousel Sale Products - Images with Product Names (Sale Products Only)
+ * Usage: [frame_carousel_sale posts_per_page="5"]
+ */
+function frame_carousel_sale_shortcode($atts) {
+    // Check if WooCommerce is active
+    if (!class_exists('WooCommerce')) {
+        return '<p>' . __('WooCommerce is required for this carousel.', 'kraftiart') . '</p>';
+    }
+    
+    // Parse shortcode attributes
+    $atts = shortcode_atts(array(
+        'posts_per_page' => '-1', // -1 means all products
+        'autoplay' => 'true',
+        'autoplay_delay' => '4000',
+        'category' => '', // Product category slug
+    ), $atts);
+    
+    // Get product IDs that are on sale using WooCommerce function
+    $sale_product_ids = wc_get_product_ids_on_sale();
+    
+    // Query products on sale
+    $args = array(
+        'post_type' => 'product',
+        'posts_per_page' => intval($atts['posts_per_page']),
+        'post_status' => 'publish',
+        'orderby' => 'date',
+        'order' => 'DESC',
+        'post__in' => !empty($sale_product_ids) ? $sale_product_ids : array(0), // If no sales, return 0 to show nothing
+    );
+    
+    // Add category filter if specified
+    if (!empty($atts['category'])) {
+        $args['tax_query'] = array(
+            array(
+                'taxonomy' => 'product_cat',
+                'field' => 'slug',
+                'terms' => $atts['category']
+            )
+        );
+    }
+    
+    $products_query = new WP_Query($args);
+    
+    if (!$products_query->have_posts()) {
+        return '<p>' . __('No sale products found.', 'kraftiart') . '</p>';
+    }
+    
+    // Generate unique ID for this carousel instance
+    $carousel_id = 'frame-carousel-sale-' . uniqid();
+    
+    ob_start();
+    ?>
+    
+    <div class="frame-carousel-sale-wrapper <?php echo esc_attr($carousel_id); ?>" data-autoplay="<?php echo esc_attr($atts['autoplay']); ?>" data-delay="<?php echo esc_attr($atts['autoplay_delay']); ?>">
+        <div class="frame-carousel-sale-track">
+            <?php 
+            while ($products_query->have_posts()) : $products_query->the_post();
+                global $product;
+                $product_id = get_the_ID();
+                $product_image = get_the_post_thumbnail_url($product_id, 'medium');
+                $product_name = get_the_title();
+                $sale_badge = $product->is_on_sale();
+                ?>
+                    <div class="frame-slide-sale">
+                        <div class="frame-slide-sale-content">
+                            <?php if ($product_image) : ?>
+                                <div class="frame-slide-sale-image">
+                                    <img src="<?php echo esc_url($product_image); ?>" alt="<?php echo esc_attr($product_name); ?>">
+                                    <?php if ($sale_badge) : ?>
+                                        <span class="sale-badge"><?php _e('SALE', 'kraftiart'); ?></span>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+                            <div class="frame-slide-sale-name">
+                                <h3><?php echo esc_html($product_name); ?></h3>
+                            </div>
+                        </div>
+                    </div>
+            <?php endwhile; 
+            wp_reset_postdata();
+            ?>
+        </div>
+        
+        <button class="frame-carousel-sale-nav frame-carousel-sale-prev" aria-label="Previous slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <button class="frame-carousel-sale-nav frame-carousel-sale-next" aria-label="Next slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        
+        <div class="frame-carousel-sale-dots"></div>
+    </div>
+    
+    <style>
+    /* Force visibility on all devices */
+    .<?php echo esc_attr($carousel_id); ?> .frame-carousel-sale-nav {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 9999 !important;
+    }
+    
+    .frame-carousel-sale-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        padding: 0 16px 80px;
+        margin: 0;
+        background: transparent;
+        isolation: isolate;
+    }
+    
+    .frame-carousel-sale-track {
+        display: flex;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
+        align-items: stretch;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .frame-slide-sale {
+        flex: 0 0 100%;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        display: flex;
+    }
+    
+    .frame-slide-sale-content {
+        background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(236, 72, 153, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        height: 100%;
+        z-index: 1;
+    }
+    
+    .frame-slide-sale-content:active {
+        transform: scale(0.98);
+        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .frame-slide-sale-image {
+        width: 100%;
+        height: 300px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .frame-slide-sale-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .frame-slide-sale-content:active .frame-slide-sale-image img {
+        transform: scale(1.05);
+    }
+    
+    .sale-badge {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        color: #fff;
+        font-weight: 700;
+        font-size: 12px;
+        letter-spacing: 1px;
+        padding: 6px 14px;
+        border-radius: 20px;
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+        z-index: 10;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+    
+    .frame-slide-sale-name {
+        padding: 20px 24px;
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    .frame-slide-sale-name h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #ec4899;
+        text-align: center;
+        line-height: 1.4;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    }
+    
+    .frame-carousel-sale-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 100 !important;
+        padding: 0;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        width: 48px;
+        height: 48px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.9);
+        pointer-events: auto;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .frame-carousel-sale-prev {
+        left: 16px;
+    }
+    
+    .frame-carousel-sale-next {
+        right: 16px;
+    }
+    
+    .frame-carousel-sale-nav:active {
+        transform: translateY(-50%) scale(0.88);
+        box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+    
+    .frame-carousel-sale-nav svg {
+        width: 22px !important;
+        height: 22px !important;
+        color: #fff !important;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)) !important;
+        display: block !important;
+    }
+    
+    .frame-carousel-sale-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex !important;
+        gap: 8px;
+        z-index: 9999 !important;
+        pointer-events: auto;
+        visibility: visible !important;
+    }
+    
+    .frame-carousel-sale-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(236, 72, 153, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        padding: 0;
+    }
+    
+    .frame-carousel-sale-dot.active {
+        width: 24px;
+        border-radius: 4px;
+        background: linear-gradient(135deg, #ec4899, #f472b6);
+    }
+    
+    /* Desktop optimizations */
+    @media (min-width: 768px) {
+        .frame-carousel-sale-wrapper {
+            min-height: 520px;
+        }
+        
+        .frame-carousel-sale-track {
+            min-height: 440px;
+        }
+        
+        .frame-slide-sale {
+            min-height: 440px;
+        }
+        
+        .frame-slide-sale-image {
+            height: 360px;
+        }
+        
+        .frame-slide-sale-name h3 {
+            font-size: 22px;
+        }
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 767px) {
+        .frame-carousel-sale-nav {
+            width: 40px !important;
+            height: 40px !important;
+            box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .frame-carousel-sale-prev {
+            left: 8px !important;
+        }
+        
+        .frame-carousel-sale-next {
+            right: 8px !important;
+        }
+        
+        .frame-carousel-sale-nav svg {
+            width: 18px !important;
+            height: 18px !important;
+        }
+        
+        .frame-carousel-sale-wrapper {
+            padding: 0 16px 70px;
+            min-height: 420px;
+        }
+        
+        .frame-carousel-sale-track {
+            min-height: 340px;
+        }
+        
+        .frame-slide-sale {
+            min-height: 340px;
+        }
+        
+        .frame-slide-sale-image {
+            height: 260px;
+        }
+        
+        .frame-slide-sale-content {
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .frame-slide-sale-name {
+            padding: 16px 20px;
+        }
+        
+        .frame-slide-sale-name h3 {
+            font-size: 16px;
+        }
+        
+        .sale-badge {
+            top: 12px;
+            right: 12px;
+            font-size: 11px;
+            padding: 5px 12px;
+        }
+        
+        .frame-carousel-sale-dots {
+            bottom: 30px;
+        }
+        
+        .frame-carousel-sale-dot {
+            width: 10px;
+            height: 10px;
+        }
+        
+        .frame-carousel-sale-dot.active {
+            width: 28px;
+        }
+    }
+    
+    /* Extra small mobile devices */
+    @media (max-width: 374px) {
+        .frame-carousel-sale-wrapper {
+            min-height: 380px;
+            padding: 0 12px 70px;
+        }
+        
+        .frame-carousel-sale-track {
+            min-height: 300px;
+        }
+        
+        .frame-slide-sale {
+            min-height: 300px;
+        }
+        
+        .frame-slide-sale-image {
+            height: 220px;
+        }
+        
+        .frame-carousel-sale-nav {
+            width: 36px !important;
+            height: 36px !important;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .frame-carousel-sale-prev {
+            left: 4px !important;
+        }
+        
+        .frame-carousel-sale-next {
+            right: 4px !important;
+        }
+        
+        .frame-carousel-sale-nav svg {
+            width: 16px !important;
+            height: 16px !important;
+        }
+        
+        .frame-slide-sale-name h3 {
+            font-size: 15px;
+        }
+    }
+    </style>
+    
+    <script>
+    (function() {
+        function initFrameCarouselSale() {
+            const wrapper = document.querySelector('.<?php echo esc_js($carousel_id); ?>');
+            if (!wrapper) return;
+            
+            const track = wrapper.querySelector('.frame-carousel-sale-track');
+            const slides = Array.from(track.querySelectorAll('.frame-slide-sale'));
+            const prevBtn = wrapper.querySelector('.frame-carousel-sale-prev');
+            const nextBtn = wrapper.querySelector('.frame-carousel-sale-next');
+            const dotsContainer = wrapper.querySelector('.frame-carousel-sale-dots');
+            
+            if (!track || slides.length === 0) return;
+            
+            let currentIndex = 0;
+            let autoplayInterval = null;
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            // Create dots
+            slides.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = 'frame-carousel-sale-dot';
+                dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(index));
+                dotsContainer.appendChild(dot);
+            });
+            
+            const dots = Array.from(dotsContainer.querySelectorAll('.frame-carousel-sale-dot'));
+            
+            function updateCarousel() {
+                const offset = -currentIndex * 100;
+                track.style.transform = `translateX(${offset}%)`;
+                
+                // Update dots
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+            }
+            
+            function goToSlide(index) {
+                currentIndex = index;
+                updateCarousel();
+                resetAutoplay();
+            }
+            
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % slides.length;
+                updateCarousel();
+            }
+            
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                updateCarousel();
+            }
+            
+            function startAutoplay() {
+                const autoplay = wrapper.getAttribute('data-autoplay') === 'true';
+                const delay = parseInt(wrapper.getAttribute('data-delay')) || 4000;
+                
+                if (autoplay) {
+                    autoplayInterval = setInterval(nextSlide, delay);
+                }
+            }
+            
+            function stopAutoplay() {
+                if (autoplayInterval) {
+                    clearInterval(autoplayInterval);
+                    autoplayInterval = null;
+                }
+            }
+            
+            function resetAutoplay() {
+                stopAutoplay();
+                startAutoplay();
+            }
+            
+            // Touch events
+            track.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                stopAutoplay();
+            }, { passive: true });
+            
+            track.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+                startAutoplay();
+            }, { passive: true });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                }
+            }
+            
+            // Button events
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    nextSlide();
+                    resetAutoplay();
+                });
+            }
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    prevSlide();
+                    resetAutoplay();
+                });
+            }
+            
+            // Keyboard navigation
+            wrapper.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                    resetAutoplay();
+                } else if (e.key === 'ArrowRight') {
+                    nextSlide();
+                    resetAutoplay();
+                }
+            });
+            
+            // Pause on hover (desktop only)
+            if (window.innerWidth >= 768) {
+                wrapper.addEventListener('mouseenter', stopAutoplay);
+                wrapper.addEventListener('mouseleave', startAutoplay);
+            }
+            
+            // Initialize
+            updateCarousel();
+            startAutoplay();
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initFrameCarouselSale);
+        } else {
+            initFrameCarouselSale();
+        }
+    })();
+    </script>
+    
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('frame_carousel_sale', 'frame_carousel_sale_shortcode');
