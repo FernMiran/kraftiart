@@ -3964,6 +3964,7 @@ function frame_carousel_tabs_shortcode($atts) {
         align-items: stretch;
         position: relative;
         z-index: 1;
+        gap: 20px;
     }
     
     .frame-slide-tabs {
@@ -3972,6 +3973,15 @@ function frame_carousel_tabs_shortcode($atts) {
         max-width: 100%;
         box-sizing: border-box;
         display: flex;
+    }
+    
+    /* Desktop: 3 slides per view */
+    @media (min-width: 768px) {
+        .frame-slide-tabs {
+            flex: 0 0 calc((100% - 40px) / 3);
+            width: calc((100% - 40px) / 3);
+            max-width: calc((100% - 40px) / 3);
+        }
     }
     
     .frame-slide-tabs-content {
@@ -4161,24 +4171,39 @@ function frame_carousel_tabs_shortcode($atts) {
     /* Desktop optimizations */
     @media (min-width: 768px) {
         .frame-carousel-tabs-track {
-            min-height: 440px;
+            min-height: 380px;
         }
         
         .frame-slide-tabs {
-            min-height: 440px;
+            min-height: 380px;
         }
         
         .frame-slide-tabs-image {
-            height: 360px;
+            height: 280px;
         }
         
         .frame-slide-tabs-name h3 {
-            font-size: 22px;
+            font-size: 18px;
         }
         
         .frame-tab-btn {
             font-size: 18px;
             padding: 14px 32px;
+        }
+        
+        .frame-tab-content {
+            padding: 0 60px 80px;
+        }
+    }
+    
+    /* Large desktop optimizations */
+    @media (min-width: 1024px) {
+        .frame-slide-tabs-image {
+            height: 320px;
+        }
+        
+        .frame-slide-tabs-name h3 {
+            font-size: 20px;
         }
     }
     
@@ -4366,7 +4391,12 @@ function frame_carousel_tabs_shortcode($atts) {
                 const dots = Array.from(dotsContainer.querySelectorAll('.frame-carousel-tabs-dot'));
                 
                 function updateCarousel() {
-                    const offset = -currentIndex * 100;
+                    const isDesktop = window.innerWidth >= 768;
+                    const slidesToShow = isDesktop ? 3 : 1;
+                    const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
+                    const gap = isDesktop ? (20 / slides.length) : 0;
+                    const offset = -currentIndex * (slideWidth + gap);
+                    
                     track.style.transform = `translateX(${offset}%)`;
                     
                     // Update dots
@@ -4382,12 +4412,36 @@ function frame_carousel_tabs_shortcode($atts) {
                 }
                 
                 function nextSlide() {
-                    currentIndex = (currentIndex + 1) % slides.length;
+                    const isDesktop = window.innerWidth >= 768;
+                    const slidesToShow = isDesktop ? 3 : 1;
+                    const maxIndex = Math.max(0, slides.length - slidesToShow);
+                    
+                    if (isDesktop && slides.length > slidesToShow) {
+                        // Infinite loop on desktop
+                        currentIndex = currentIndex + 1;
+                        if (currentIndex > maxIndex) {
+                            currentIndex = 0;
+                        }
+                    } else {
+                        currentIndex = (currentIndex + 1) % slides.length;
+                    }
                     updateCarousel();
                 }
                 
                 function prevSlide() {
-                    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                    const isDesktop = window.innerWidth >= 768;
+                    const slidesToShow = isDesktop ? 3 : 1;
+                    const maxIndex = Math.max(0, slides.length - slidesToShow);
+                    
+                    if (isDesktop && slides.length > slidesToShow) {
+                        // Infinite loop on desktop
+                        currentIndex = currentIndex - 1;
+                        if (currentIndex < 0) {
+                            currentIndex = maxIndex;
+                        }
+                    } else {
+                        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                    }
                     updateCarousel();
                 }
                 
@@ -4476,6 +4530,16 @@ function frame_carousel_tabs_shortcode($atts) {
                     stopAutoplay,
                     resetAutoplay
                 };
+                
+                // Handle window resize
+                let resizeTimeout;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        currentIndex = 0; // Reset to first slide on resize
+                        updateCarousel();
+                    }, 250);
+                });
                 
                 // Initialize
                 updateCarousel();
