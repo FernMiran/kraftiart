@@ -3875,7 +3875,7 @@ function frame_carousel_tabs_shortcode($atts) {
         position: relative;
         width: 100%;
         max-width: 100%;
-        overflow: hidden;
+        overflow: visible;
         padding: 0;
         margin: 0;
         background: transparent;
@@ -3884,11 +3884,15 @@ function frame_carousel_tabs_shortcode($atts) {
     
     /* Tabs Navigation */
     .frame-tabs-nav {
-        display: flex;
+        display: flex !important;
         gap: 12px;
         margin-bottom: 24px;
         justify-content: center;
         flex-wrap: wrap;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 10;
+        padding: 0 16px;
     }
     
     .frame-tab-btn {
@@ -4284,6 +4288,9 @@ function frame_carousel_tabs_shortcode($atts) {
         .frame-tab-btn {
             font-size: 14px;
             padding: 10px 20px;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
         
         .frame-tab-btn svg {
@@ -4294,6 +4301,9 @@ function frame_carousel_tabs_shortcode($atts) {
         .frame-tabs-nav {
             gap: 8px;
             margin-bottom: 20px;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
     }
     
@@ -4343,6 +4353,14 @@ function frame_carousel_tabs_shortcode($atts) {
         .frame-tab-btn {
             font-size: 13px;
             padding: 8px 16px;
+            display: flex !important;
+            visibility: visible !important;
+        }
+        
+        .frame-tabs-nav {
+            display: flex !important;
+            visibility: visible !important;
+            margin-bottom: 16px;
         }
     }
     </style>
