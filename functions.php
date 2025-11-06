@@ -601,3 +601,942 @@ add_image_size('shop_single', 600, 800);
 add_filter('woocommerce_gallery_image_size', function($size) {
     return 'shop_single';
 });
+
+/**
+ * Enqueue Swiper.js for testimonials carousel
+ */
+function enqueue_swiper_testimonials() {
+    // Swiper CSS
+    wp_enqueue_style('swiper-css', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', array(), '11.0.0');
+    
+    // Swiper JS
+    wp_enqueue_script('swiper-js', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), '11.0.0', true);
+    
+    // Custom testimonials carousel styles
+    wp_add_inline_style('swiper-css', '
+        .testimonials-carousel-wrapper {
+            padding: 20px 0;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+        }
+        .testimonials-carousel-wrapper .swiper {
+            width: 100%;
+            padding: 20px 10px 60px;
+            overflow: visible;
+        }
+        .testimonials-carousel-wrapper .swiper-slide {
+            height: auto !important;
+            display: flex;
+            box-sizing: border-box;
+        }
+        .testimonial-slide {
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .testimonial-slide:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .testimonial-image {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            border: 3px solid #f0f0f0;
+        }
+        .testimonial-content {
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+        .testimonial-text {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #333;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        .testimonial-author {
+            font-weight: 600;
+            color: #222;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .testimonial-role {
+            font-size: 13px;
+            color: #666;
+        }
+        .testimonial-rating {
+            color: #ffc107;
+            font-size: 16px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .testimonials-carousel-wrapper .swiper-pagination {
+            bottom: 20px !important;
+        }
+        .testimonials-carousel-wrapper .swiper-pagination-bullet {
+            background: #333;
+            opacity: 0.5;
+            width: 8px;
+            height: 8px;
+            margin: 0 4px !important;
+        }
+        .testimonials-carousel-wrapper .swiper-pagination-bullet-active {
+            background: var(--primary-color, #ff6b6b);
+            opacity: 1;
+        }
+        .testimonials-carousel-wrapper .swiper-button-next,
+        .testimonials-carousel-wrapper .swiper-button-prev {
+            color: #333 !important;
+            background: #fff !important;
+            width: 45px !important;
+            height: 45px !important;
+            border-radius: 50% !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15) !important;
+            transition: all 0.3s ease !important;
+            z-index: 10 !important;
+        }
+        .testimonials-carousel-wrapper .swiper-button-next:hover,
+        .testimonials-carousel-wrapper .swiper-button-prev:hover {
+            color: #fff !important;
+            background: var(--primary-color, #ff6b6b) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25) !important;
+        }
+        .testimonials-carousel-wrapper .swiper-button-next:after,
+        .testimonials-carousel-wrapper .swiper-button-prev:after {
+            font-size: 18px !important;
+            font-weight: bold !important;
+        }
+        .testimonials-carousel-wrapper .swiper-button-next {
+            right: 5px !important;
+        }
+        .testimonials-carousel-wrapper .swiper-button-prev {
+            left: 5px !important;
+        }
+        .testimonials-carousel-wrapper .swiper-button-disabled {
+            opacity: 0.35 !important;
+            pointer-events: none !important;
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 767px) {
+            .testimonials-carousel-wrapper {
+                padding: 15px 0;
+            }
+            .testimonials-carousel-wrapper .swiper {
+                padding: 15px 5px 50px;
+            }
+            .testimonial-slide {
+                padding: 20px 15px;
+            }
+            .testimonial-image {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 12px;
+            }
+            .testimonial-text {
+                font-size: 14px;
+                line-height: 1.4;
+            }
+            .testimonial-author {
+                font-size: 15px;
+            }
+            .testimonial-role {
+                font-size: 12px;
+            }
+            .testimonial-rating {
+                font-size: 14px;
+            }
+            .testimonials-carousel-wrapper .swiper-button-next,
+            .testimonials-carousel-wrapper .swiper-button-prev {
+                width: 35px !important;
+                height: 35px !important;
+            }
+            .testimonials-carousel-wrapper .swiper-button-next:after,
+            .testimonials-carousel-wrapper .swiper-button-prev:after {
+                font-size: 14px !important;
+            }
+            .testimonials-carousel-wrapper .swiper-button-next {
+                right: 2px !important;
+            }
+            .testimonials-carousel-wrapper .swiper-button-prev {
+                left: 2px !important;
+            }
+        }
+    ');
+}
+add_action('wp_enqueue_scripts', 'enqueue_swiper_testimonials');
+
+/**
+ * Testimonials Carousel Shortcode
+ * Usage: [testimonials_carousel slides_per_view="3" space_between="30" autoplay_delay="3000"]
+ */
+function testimonials_carousel_shortcode($atts) {
+    // Parse shortcode attributes
+    $atts = shortcode_atts(array(
+        'slides_per_view' => '3',
+        'space_between' => '30',
+        'autoplay_delay' => '3000',
+        'show_pagination' => 'true',
+        'show_navigation' => 'true',
+        'loop' => 'true',
+        'speed' => '600',
+    ), $atts);
+    
+    // Query testimonials
+    $args = array(
+        'post_type' => 'tt-testimonial',
+        'posts_per_page' => -1,
+        'post_status' => 'publish',
+        'orderby' => 'date',
+        'order' => 'DESC'
+    );
+    
+    $testimonials = new WP_Query($args);
+    
+    if (!$testimonials->have_posts()) {
+        return '<p>' . __('No testimonials found.', 'kraftiart') . '</p>';
+    }
+    
+    // Generate unique ID for this carousel instance
+    $carousel_id = 'testimonials-swiper-' . uniqid();
+    
+    ob_start();
+    ?>
+    
+    <div class="testimonials-carousel-wrapper">
+        <div class="swiper <?php echo esc_attr($carousel_id); ?>">
+            <div class="swiper-wrapper">
+                <?php while ($testimonials->have_posts()) : $testimonials->the_post(); 
+                    // Get custom fields
+                    $author_name = get_post_meta(get_the_ID(), 'kraftiart_testimonial_name', true);
+                    $author_role = get_post_meta(get_the_ID(), 'kraftiart_testimonial_designation', true);
+                    $rating = get_post_meta(get_the_ID(), 'kraftiart_testimonial_rating', true);
+                    $image = get_the_post_thumbnail_url(get_the_ID(), 'thumbnail');
+                    
+                    // If no custom name, use post title
+                    if (empty($author_name)) {
+                        $author_name = get_the_title();
+                    }
+                ?>
+                <div class="swiper-slide">
+                    <div class="testimonial-slide">
+                        <?php if ($image) : ?>
+                            <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($author_name); ?>" class="testimonial-image">
+                        <?php endif; ?>
+                        
+                        <?php if ($rating) : ?>
+                            <div class="testimonial-rating">
+                                <?php 
+                                for ($i = 0; $i < intval($rating); $i++) {
+                                    echo '★';
+                                }
+                                ?>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <div class="testimonial-content">
+                            <div class="testimonial-text">
+                                <?php echo wp_kses_post(get_the_content()); ?>
+                            </div>
+                        </div>
+                        
+                        <div class="testimonial-author-info">
+                            <?php if ($author_name) : ?>
+                                <div class="testimonial-author"><?php echo esc_html($author_name); ?></div>
+                            <?php endif; ?>
+                            
+                            <?php if ($author_role) : ?>
+                                <div class="testimonial-role"><?php echo esc_html($author_role); ?></div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <?php endwhile; wp_reset_postdata(); ?>
+            </div>
+            
+            <?php if ($atts['show_pagination'] === 'true') : ?>
+                <div class="swiper-pagination"></div>
+            <?php endif; ?>
+            
+            <?php if ($atts['show_navigation'] === 'true') : ?>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            <?php endif; ?>
+        </div>
+    </div>
+    
+    <script>
+    (function() {
+        function initTestimonialsSwiper() {
+            if (typeof Swiper === 'undefined') {
+                setTimeout(initTestimonialsSwiper, 100);
+                return;
+            }
+            
+            var swiperEl = document.querySelector('.<?php echo esc_js($carousel_id); ?>');
+            if (!swiperEl) return;
+            
+            var testimonialSwiper = new Swiper('.<?php echo esc_js($carousel_id); ?>', {
+                slidesPerView: 1,
+                spaceBetween: 15,
+                loop: true,
+                speed: 600,
+                autoplay: {
+                    delay: <?php echo intval($atts['autoplay_delay']); ?>,
+                    disableOnInteraction: false,
+                    reverseDirection: true,
+                },
+                pagination: {
+                    el: '.<?php echo esc_js($carousel_id); ?> .swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.<?php echo esc_js($carousel_id); ?> .swiper-button-next',
+                    prevEl: '.<?php echo esc_js($carousel_id); ?> .swiper-button-prev',
+                },
+                grabCursor: true,
+                touchRatio: 1,
+                touchAngle: 45,
+                longSwipesRatio: 0.5,
+                breakpoints: {
+                    640: {
+                        slidesPerView: 1,
+                        spaceBetween: 20,
+                    },
+                    768: {
+                        slidesPerView: 2,
+                        spaceBetween: 25,
+                    },
+                    1024: {
+                        slidesPerView: <?php echo intval($atts['slides_per_view']); ?>,
+                        spaceBetween: <?php echo intval($atts['space_between']); ?>,
+                    },
+                },
+            });
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initTestimonialsSwiper);
+        } else {
+            initTestimonialsSwiper();
+        }
+    })();
+    </script>
+    
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('testimonials_carousel', 'testimonials_carousel_shortcode');
+
+/**
+ * Frame Carousel Shortcode - Pure CSS/JS Implementation
+ * Usage: [frame_carousel post_type="tt-portfolio" posts_per_page="5"]
+ */
+function frame_carousel_shortcode($atts) {
+    // Parse shortcode attributes
+    $atts = shortcode_atts(array(
+        'post_type' => 'tt-portfolio',
+        'posts_per_page' => '5',
+        'autoplay' => 'true',
+        'autoplay_delay' => '4000',
+        'category' => '',
+    ), $atts);
+    
+    // Query posts
+    $args = array(
+        'post_type' => $atts['post_type'],
+        'posts_per_page' => intval($atts['posts_per_page']),
+        'post_status' => 'publish',
+        'orderby' => 'date',
+        'order' => 'DESC'
+    );
+    
+    // Add category filter if specified
+    if (!empty($atts['category'])) {
+        $args['tax_query'] = array(
+            array(
+                'taxonomy' => 'portfolio_category',
+                'field' => 'slug',
+                'terms' => $atts['category']
+            )
+        );
+    }
+    
+    $posts_query = new WP_Query($args);
+    
+    if (!$posts_query->have_posts()) {
+        return '<p>' . __('No items found.', 'kraftiart') . '</p>';
+    }
+    
+    // Generate unique ID for this carousel instance
+    $carousel_id = 'frame-carousel-' . uniqid();
+    
+    ob_start();
+    ?>
+    
+    <div class="frame-carousel-wrapper <?php echo esc_attr($carousel_id); ?>" data-autoplay="<?php echo esc_attr($atts['autoplay']); ?>" data-delay="<?php echo esc_attr($atts['autoplay_delay']); ?>">
+        <div class="frame-carousel-track">
+            <?php 
+            while ($posts_query->have_posts()) : $posts_query->the_post();
+                // Get post data
+                $title = get_the_title();
+                $excerpt = get_the_excerpt();
+                $content = get_the_content();
+                
+                // For description, use full content first, fall back to excerpt
+                $description = !empty($content) ? $content : $excerpt;
+                // Strip all HTML tags and shortcodes
+                $description = strip_tags($description);
+                
+                $featured_image = get_the_post_thumbnail_url(get_the_ID(), 'thumbnail');
+                
+                // Get categories
+                $terms = get_the_terms(get_the_ID(), 'portfolio_category');
+                $category = '';
+                if ($terms && !is_wp_error($terms)) {
+                    $term_names = array();
+                    foreach ($terms as $term) {
+                        $term_names[] = $term->name;
+                    }
+                    $category = implode(', ', $term_names);
+                }
+                
+                $permalink = get_permalink();
+                ?>
+                    <div class="frame-slide">
+                        <div class="frame-slide-content">
+                            <?php if ($featured_image) : ?>
+                                <div class="frame-slide-image">
+                                    <img src="<?php echo esc_url($featured_image); ?>" alt="<?php echo esc_attr($title); ?>">
+                                </div>
+                            <?php endif; ?>
+                            
+                            <div class="frame-slide-text">
+                                <?php if (!empty($category)) : ?>
+                                    <div class="frame-slide-category"><?php echo esc_html($category); ?></div>
+                                <?php endif; ?>
+                                
+                                <h3 class="frame-slide-title"><?php echo esc_html($title); ?></h3>
+                                
+                                <?php if (!empty($description)) : ?>
+                                    <p class="frame-slide-description"><?php echo esc_html($description); ?></p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+            <?php endwhile; 
+            wp_reset_postdata();
+            ?>
+        </div>
+        
+        <button class="frame-carousel-nav frame-carousel-prev" aria-label="Previous slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <button class="frame-carousel-nav frame-carousel-next" aria-label="Next slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        
+        <div class="frame-carousel-dots"></div>
+    </div>
+    
+    <style>
+    .frame-carousel-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        padding: 0 16px 80px;
+        margin: 0;
+        background: transparent;
+    }
+    
+    .frame-carousel-track {
+        display: flex;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
+        align-items: stretch;
+    }
+    
+    .frame-slide {
+        flex: 0 0 100%;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        display: flex;
+    }
+    .frame-slide-content {
+        background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(236, 72, 153, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        height: 100%;
+    }
+    
+    .frame-slide-content:active {
+        transform: scale(0.97);
+        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .frame-slide-image {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 5px solid #fff;
+        box-shadow: 0 8px 24px rgba(236, 72, 153, 0.25), 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin: 32px auto 24px;
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .frame-slide-image::before {
+        content: '';
+        position: absolute;
+        inset: -5px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ec4899, #f472b6);
+        opacity: 0;
+        z-index: -1;
+        transition: opacity 0.3s ease;
+    }
+    
+    .frame-slide-image:active {
+        transform: scale(0.92);
+        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.3), 0 3px 10px rgba(0, 0, 0, 0.12);
+    }
+    
+    .frame-slide-image:active::before {
+        opacity: 0.3;
+    }
+    
+    .frame-slide-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .frame-slide-text {
+        padding: 0 24px 36px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.3) 100%);
+    }
+    
+    .frame-slide-category {
+        font-size: 12px;
+        font-weight: 600;
+        color: #ec4899;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+    }
+    
+    .frame-slide-title {
+        font-size: 24px;
+        font-weight: 800;
+        margin: 0 0 16px 0;
+        line-height: 1.25;
+        text-align: center;
+        letter-spacing: -0.02em;
+        text-shadow: 0 2px 4px rgba(131, 24, 67, 0.1);
+        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .frame-slide-description {
+        font-size: 15px;
+        line-height: 1.7;
+        color: #9f1239;
+        margin: 0;
+        text-align: center;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 400;
+        padding: 0 4px;
+    }
+    
+    .frame-carousel-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        width: 48px;
+        height: 48px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.9);
+    }
+    
+    .frame-carousel-prev {
+        left: 16px;
+    }
+    
+    .frame-carousel-next {
+        right: 16px;
+    }
+    
+    .frame-carousel-nav:active {
+        transform: translateY(-50%) scale(0.88);
+        box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+    
+    .frame-carousel-nav svg {
+        width: 22px;
+        height: 22px;
+        color: #fff;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+    }
+    
+    .frame-carousel-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 10;
+    }
+    
+    .frame-carousel-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(236, 72, 153, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        padding: 0;
+    }
+    
+    .frame-carousel-dot.active {
+        width: 24px;
+        border-radius: 4px;
+        background: linear-gradient(135deg, #ec4899, #f472b6);
+    }
+    
+    /* Desktop optimizations */
+    @media (min-width: 768px) {
+        .frame-slide-image {
+            width: 96px;
+            height: 96px;
+        }
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 767px) {
+        .frame-carousel-nav {
+            width: 40px;
+            height: 40px;
+            box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .frame-carousel-prev {
+            left: 8px;
+        }
+        
+        .frame-carousel-next {
+            right: 8px;
+        }
+        
+        .frame-carousel-nav svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .frame-carousel-wrapper {
+            padding: 0 16px 70px;
+            min-height: 420px;
+        }
+        
+        .frame-carousel-track {
+            min-height: 360px;
+        }
+        
+        .frame-slide {
+            min-height: 360px;
+        }
+        
+        .frame-slide-content {
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .frame-slide-image {
+            width: 88px;
+            height: 88px;
+            border-width: 4px;
+            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.28), 0 3px 10px rgba(0, 0, 0, 0.12);
+            margin: 28px auto 20px;
+            flex-shrink: 0;
+        }
+        
+        .frame-slide-text {
+            padding: 0 20px 32px;
+        }
+        
+        .frame-slide-title {
+            font-size: 22px;
+            margin: 0 0 14px 0;
+        }
+        
+        .frame-slide-description {
+            font-size: 14.5px;
+            line-height: 1.65;
+        }
+        
+        .frame-carousel-dots {
+            bottom: 30px;
+        }
+        
+        .frame-carousel-dot {
+            width: 10px;
+            height: 10px;
+        }
+        
+        .frame-carousel-dot.active {
+            width: 28px;
+        }
+    }
+    
+    /* Extra small mobile devices */
+    @media (max-width: 374px) {
+        .frame-carousel-wrapper {
+            min-height: 400px;
+            padding: 0 12px 70px;
+        }
+        
+        .frame-carousel-track {
+            min-height: 340px;
+        }
+        
+        .frame-slide {
+            min-height: 340px;
+        }
+        
+        .frame-slide-image {
+            width: 80px;
+            height: 80px;
+        }
+        
+        .frame-slide-title {
+            font-size: 20px;
+        }
+        
+        .frame-slide-description {
+            font-size: 14px;
+        }
+        
+        .frame-slide-text {
+            padding: 0 18px 30px;
+        }
+        
+        .frame-carousel-nav {
+            width: 36px;
+            height: 36px;
+        }
+        
+        .frame-carousel-prev {
+            left: 4px;
+        }
+        
+        .frame-carousel-next {
+            right: 4px;
+        }
+        
+        .frame-carousel-nav svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+    </style>
+    
+    <script>
+    (function() {
+        function initFrameCarousel() {
+            const wrapper = document.querySelector('.<?php echo esc_js($carousel_id); ?>');
+            if (!wrapper) return;
+            
+            const track = wrapper.querySelector('.frame-carousel-track');
+            const slides = Array.from(track.querySelectorAll('.frame-slide'));
+            const prevBtn = wrapper.querySelector('.frame-carousel-prev');
+            const nextBtn = wrapper.querySelector('.frame-carousel-next');
+            const dotsContainer = wrapper.querySelector('.frame-carousel-dots');
+            
+            if (!track || slides.length === 0) return;
+            
+            let currentIndex = 0;
+            let autoplayInterval = null;
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            // Create dots
+            slides.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = 'frame-carousel-dot';
+                dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(index));
+                dotsContainer.appendChild(dot);
+            });
+            
+            const dots = Array.from(dotsContainer.querySelectorAll('.frame-carousel-dot'));
+            
+            function updateCarousel() {
+                const offset = -currentIndex * 100;
+                track.style.transform = `translateX(${offset}%)`;
+                
+                // Update dots
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+            }
+            
+            function goToSlide(index) {
+                currentIndex = index;
+                updateCarousel();
+                resetAutoplay();
+            }
+            
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % slides.length;
+                updateCarousel();
+            }
+            
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                updateCarousel();
+            }
+            
+            function startAutoplay() {
+                const autoplay = wrapper.getAttribute('data-autoplay') === 'true';
+                const delay = parseInt(wrapper.getAttribute('data-delay')) || 4000;
+                
+                if (autoplay) {
+                    autoplayInterval = setInterval(nextSlide, delay);
+                }
+            }
+            
+            function stopAutoplay() {
+                if (autoplayInterval) {
+                    clearInterval(autoplayInterval);
+                    autoplayInterval = null;
+                }
+            }
+            
+            function resetAutoplay() {
+                stopAutoplay();
+                startAutoplay();
+            }
+            
+            // Touch events
+            track.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                stopAutoplay();
+            }, { passive: true });
+            
+            track.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+                startAutoplay();
+            }, { passive: true });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                }
+            }
+            
+            // Button events
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    nextSlide();
+                    resetAutoplay();
+                });
+            }
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    prevSlide();
+                    resetAutoplay();
+                });
+            }
+            
+            // Keyboard navigation
+            wrapper.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                    resetAutoplay();
+                } else if (e.key === 'ArrowRight') {
+                    nextSlide();
+                    resetAutoplay();
+                }
+            });
+            
+            // Pause on hover (desktop only)
+            if (window.innerWidth >= 768) {
+                wrapper.addEventListener('mouseenter', stopAutoplay);
+                wrapper.addEventListener('mouseleave', startAutoplay);
+            }
+            
+            // Initialize
+            updateCarousel();
+            startAutoplay();
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initFrameCarousel);
+        } else {
+            initFrameCarousel();
+        }
+    })();
+    </script>
+    
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('frame_carousel', 'frame_carousel_shortcode');
