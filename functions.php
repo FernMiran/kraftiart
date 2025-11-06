@@ -1540,3 +1540,473 @@ function frame_carousel_shortcode($atts) {
     return ob_get_clean();
 }
 add_shortcode('frame_carousel', 'frame_carousel_shortcode');
+
+/**
+ * Frame Carousel Simple Shortcode - Images Only (No Title/Description)
+ * Usage: [frame_carousel_simple post_type="tt-portfolio" posts_per_page="5"]
+ */
+function frame_carousel_simple_shortcode($atts) {
+    // Parse shortcode attributes
+    $atts = shortcode_atts(array(
+        'post_type' => 'tt-portfolio',
+        'posts_per_page' => '5',
+        'autoplay' => 'true',
+        'autoplay_delay' => '4000',
+        'category' => '',
+    ), $atts);
+    
+    // Query posts
+    $args = array(
+        'post_type' => $atts['post_type'],
+        'posts_per_page' => intval($atts['posts_per_page']),
+        'post_status' => 'publish',
+        'orderby' => 'date',
+        'order' => 'DESC'
+    );
+    
+    // Add category filter if specified
+    if (!empty($atts['category'])) {
+        $args['tax_query'] = array(
+            array(
+                'taxonomy' => 'portfolio_category',
+                'field' => 'slug',
+                'terms' => $atts['category']
+            )
+        );
+    }
+    
+    $posts_query = new WP_Query($args);
+    
+    if (!$posts_query->have_posts()) {
+        return '<p>' . __('No items found.', 'kraftiart') . '</p>';
+    }
+    
+    // Generate unique ID for this carousel instance
+    $carousel_id = 'frame-carousel-simple-' . uniqid();
+    
+    ob_start();
+    ?>
+    
+    <div class="frame-carousel-simple-wrapper <?php echo esc_attr($carousel_id); ?>" data-autoplay="<?php echo esc_attr($atts['autoplay']); ?>" data-delay="<?php echo esc_attr($atts['autoplay_delay']); ?>">
+        <div class="frame-carousel-simple-track">
+            <?php 
+            while ($posts_query->have_posts()) : $posts_query->the_post();
+                $featured_image = get_the_post_thumbnail_url(get_the_ID(), 'thumbnail');
+                $title = get_the_title();
+                ?>
+                    <div class="frame-slide-simple">
+                        <div class="frame-slide-simple-content">
+                            <?php if ($featured_image) : ?>
+                                <div class="frame-slide-simple-image">
+                                    <img src="<?php echo esc_url($featured_image); ?>" alt="<?php echo esc_attr($title); ?>">
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+            <?php endwhile; 
+            wp_reset_postdata();
+            ?>
+        </div>
+        
+        <button class="frame-carousel-simple-nav frame-carousel-simple-prev" aria-label="Previous slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <button class="frame-carousel-simple-nav frame-carousel-simple-next" aria-label="Next slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        
+        <div class="frame-carousel-simple-dots"></div>
+    </div>
+    
+    <style>
+    .frame-carousel-simple-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        padding: 0 16px 80px;
+        margin: 0;
+        background: transparent;
+    }
+    
+    .frame-carousel-simple-track {
+        display: flex;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
+        align-items: stretch;
+    }
+    
+    .frame-slide-simple {
+        flex: 0 0 100%;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        display: flex;
+    }
+    
+    .frame-slide-simple-content {
+        background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(236, 72, 153, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        height: 100%;
+    }
+    
+    .frame-slide-simple-content:active {
+        transform: scale(0.98);
+        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .frame-slide-simple-image {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .frame-slide-simple-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .frame-slide-simple-content:active .frame-slide-simple-image img {
+        transform: scale(1.02);
+    }
+    
+    .frame-carousel-simple-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        width: 48px;
+        height: 48px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.9);
+    }
+    
+    .frame-carousel-simple-prev {
+        left: 16px;
+    }
+    
+    .frame-carousel-simple-next {
+        right: 16px;
+    }
+    
+    .frame-carousel-simple-nav:active {
+        transform: translateY(-50%) scale(0.88);
+        box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+    
+    .frame-carousel-simple-nav svg {
+        width: 22px;
+        height: 22px;
+        color: #fff;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+    }
+    
+    .frame-carousel-simple-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 10;
+    }
+    
+    .frame-carousel-simple-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(236, 72, 153, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        padding: 0;
+    }
+    
+    .frame-carousel-simple-dot.active {
+        width: 24px;
+        border-radius: 4px;
+        background: linear-gradient(135deg, #ec4899, #f472b6);
+    }
+    
+    /* Desktop optimizations */
+    @media (min-width: 768px) {
+        .frame-carousel-simple-wrapper {
+            min-height: 500px;
+        }
+        
+        .frame-carousel-simple-track {
+            min-height: 420px;
+        }
+        
+        .frame-slide-simple {
+            min-height: 420px;
+        }
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 767px) {
+        .frame-carousel-simple-nav {
+            width: 40px;
+            height: 40px;
+            box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .frame-carousel-simple-prev {
+            left: 8px;
+        }
+        
+        .frame-carousel-simple-next {
+            right: 8px;
+        }
+        
+        .frame-carousel-simple-nav svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .frame-carousel-simple-wrapper {
+            padding: 0 16px 70px;
+            min-height: 380px;
+        }
+        
+        .frame-carousel-simple-track {
+            min-height: 300px;
+        }
+        
+        .frame-slide-simple {
+            min-height: 300px;
+        }
+        
+        .frame-slide-simple-content {
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .frame-carousel-simple-dots {
+            bottom: 30px;
+        }
+        
+        .frame-carousel-simple-dot {
+            width: 10px;
+            height: 10px;
+        }
+        
+        .frame-carousel-simple-dot.active {
+            width: 28px;
+        }
+    }
+    
+    /* Extra small mobile devices */
+    @media (max-width: 374px) {
+        .frame-carousel-simple-wrapper {
+            min-height: 340px;
+            padding: 0 12px 70px;
+        }
+        
+        .frame-carousel-simple-track {
+            min-height: 260px;
+        }
+        
+        .frame-slide-simple {
+            min-height: 260px;
+        }
+        
+        .frame-carousel-simple-nav {
+            width: 36px;
+            height: 36px;
+        }
+        
+        .frame-carousel-simple-prev {
+            left: 4px;
+        }
+        
+        .frame-carousel-simple-next {
+            right: 4px;
+        }
+        
+        .frame-carousel-simple-nav svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+    </style>
+    
+    <script>
+    (function() {
+        function initFrameCarouselSimple() {
+            const wrapper = document.querySelector('.<?php echo esc_js($carousel_id); ?>');
+            if (!wrapper) return;
+            
+            const track = wrapper.querySelector('.frame-carousel-simple-track');
+            const slides = Array.from(track.querySelectorAll('.frame-slide-simple'));
+            const prevBtn = wrapper.querySelector('.frame-carousel-simple-prev');
+            const nextBtn = wrapper.querySelector('.frame-carousel-simple-next');
+            const dotsContainer = wrapper.querySelector('.frame-carousel-simple-dots');
+            
+            if (!track || slides.length === 0) return;
+            
+            let currentIndex = 0;
+            let autoplayInterval = null;
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            // Create dots
+            slides.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = 'frame-carousel-simple-dot';
+                dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(index));
+                dotsContainer.appendChild(dot);
+            });
+            
+            const dots = Array.from(dotsContainer.querySelectorAll('.frame-carousel-simple-dot'));
+            
+            function updateCarousel() {
+                const offset = -currentIndex * 100;
+                track.style.transform = `translateX(${offset}%)`;
+                
+                // Update dots
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+            }
+            
+            function goToSlide(index) {
+                currentIndex = index;
+                updateCarousel();
+                resetAutoplay();
+            }
+            
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % slides.length;
+                updateCarousel();
+            }
+            
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                updateCarousel();
+            }
+            
+            function startAutoplay() {
+                const autoplay = wrapper.getAttribute('data-autoplay') === 'true';
+                const delay = parseInt(wrapper.getAttribute('data-delay')) || 4000;
+                
+                if (autoplay) {
+                    autoplayInterval = setInterval(nextSlide, delay);
+                }
+            }
+            
+            function stopAutoplay() {
+                if (autoplayInterval) {
+                    clearInterval(autoplayInterval);
+                    autoplayInterval = null;
+                }
+            }
+            
+            function resetAutoplay() {
+                stopAutoplay();
+                startAutoplay();
+            }
+            
+            // Touch events
+            track.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                stopAutoplay();
+            }, { passive: true });
+            
+            track.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+                startAutoplay();
+            }, { passive: true });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                }
+            }
+            
+            // Button events
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    nextSlide();
+                    resetAutoplay();
+                });
+            }
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    prevSlide();
+                    resetAutoplay();
+                });
+            }
+            
+            // Keyboard navigation
+            wrapper.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                    resetAutoplay();
+                } else if (e.key === 'ArrowRight') {
+                    nextSlide();
+                    resetAutoplay();
+                }
+            });
+            
+            // Pause on hover (desktop only)
+            if (window.innerWidth >= 768) {
+                wrapper.addEventListener('mouseenter', stopAutoplay);
+                wrapper.addEventListener('mouseleave', startAutoplay);
+            }
+            
+            // Initialize
+            updateCarousel();
+            startAutoplay();
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initFrameCarouselSimple);
+        } else {
+            initFrameCarouselSimple();
+        }
+    })();
+    </script>
+    
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('frame_carousel_simple', 'frame_carousel_simple_shortcode');
