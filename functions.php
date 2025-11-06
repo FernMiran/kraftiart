@@ -3686,3 +3686,845 @@ function frame_carousel_new_shortcode($atts) {
     return ob_get_clean();
 }
 add_shortcode('frame_carousel_new', 'frame_carousel_new_shortcode');
+
+/**
+ * Frame Carousel Tabs - New Products & Best Sellers with Tabs
+ * Usage: [frame_carousel_tabs]
+ */
+function frame_carousel_tabs_shortcode($atts) {
+    // Check if WooCommerce is active
+    if (!class_exists('WooCommerce')) {
+        return '<p>' . __('WooCommerce is required for this carousel.', 'kraftiart') . '</p>';
+    }
+    
+    // Parse shortcode attributes
+    $atts = shortcode_atts(array(
+        'posts_per_page' => '10',
+        'autoplay' => 'true',
+        'autoplay_delay' => '4000',
+        'category' => '', // Product category slug
+    ), $atts);
+    
+    // Query newest products
+    $args_new = array(
+        'post_type' => 'product',
+        'posts_per_page' => intval($atts['posts_per_page']),
+        'post_status' => 'publish',
+        'orderby' => 'date',
+        'order' => 'DESC',
+    );
+    
+    // Query best selling products
+    $args_bestsellers = array(
+        'post_type' => 'product',
+        'posts_per_page' => intval($atts['posts_per_page']),
+        'post_status' => 'publish',
+        'meta_key' => 'total_sales',
+        'orderby' => 'meta_value_num',
+        'order' => 'DESC',
+    );
+    
+    // Add category filter if specified
+    if (!empty($atts['category'])) {
+        $tax_query = array(
+            array(
+                'taxonomy' => 'product_cat',
+                'field' => 'slug',
+                'terms' => $atts['category']
+            )
+        );
+        $args_new['tax_query'] = $tax_query;
+        $args_bestsellers['tax_query'] = $tax_query;
+    }
+    
+    $products_new = new WP_Query($args_new);
+    $products_bestsellers = new WP_Query($args_bestsellers);
+    
+    if (!$products_new->have_posts() && !$products_bestsellers->have_posts()) {
+        return '<p>' . __('No products found.', 'kraftiart') . '</p>';
+    }
+    
+    // Generate unique ID for this carousel instance
+    $carousel_id = 'frame-carousel-tabs-' . uniqid();
+    
+    ob_start();
+    ?>
+    
+    <div class="frame-carousel-tabs-wrapper <?php echo esc_attr($carousel_id); ?>" data-autoplay="<?php echo esc_attr($atts['autoplay']); ?>" data-delay="<?php echo esc_attr($atts['autoplay_delay']); ?>">
+        <!-- Tabs Navigation -->
+        <div class="frame-tabs-nav">
+            <button class="frame-tab-btn active" data-tab="new">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5V19M5 12L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <?php _e('Nuevos', 'kraftiart'); ?>
+            </button>
+            <button class="frame-tab-btn" data-tab="bestsellers">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
+                </svg>
+                <?php _e('Más Vendidos', 'kraftiart'); ?>
+            </button>
+        </div>
+        
+        <!-- Tab Content: New Products -->
+        <div class="frame-tab-content active" data-content="new">
+            <div class="frame-carousel-tabs-track" data-carousel="new">
+                <?php 
+                if ($products_new->have_posts()) :
+                    while ($products_new->have_posts()) : $products_new->the_post();
+                        global $product;
+                        $product_id = get_the_ID();
+                        $product_image = get_the_post_thumbnail_url($product_id, 'medium');
+                        $product_name = get_the_title();
+                        ?>
+                            <div class="frame-slide-tabs">
+                                <div class="frame-slide-tabs-content">
+                                    <?php if ($product_image) : ?>
+                                        <div class="frame-slide-tabs-image">
+                                            <img src="<?php echo esc_url($product_image); ?>" alt="<?php echo esc_attr($product_name); ?>">
+                                            <span class="new-badge"><?php _e('NEW', 'kraftiart'); ?></span>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="frame-slide-tabs-name">
+                                        <h3><?php echo esc_html($product_name); ?></h3>
+                                    </div>
+                                </div>
+                            </div>
+                    <?php endwhile;
+                endif;
+                wp_reset_postdata();
+                ?>
+            </div>
+            
+            <button class="frame-carousel-tabs-nav frame-carousel-tabs-prev" data-carousel="new" aria-label="Previous slide">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="frame-carousel-tabs-nav frame-carousel-tabs-next" data-carousel="new" aria-label="Next slide">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            
+            <div class="frame-carousel-tabs-dots" data-carousel="new"></div>
+        </div>
+        
+        <!-- Tab Content: Best Sellers -->
+        <div class="frame-tab-content" data-content="bestsellers">
+            <div class="frame-carousel-tabs-track" data-carousel="bestsellers">
+                <?php 
+                if ($products_bestsellers->have_posts()) :
+                    while ($products_bestsellers->have_posts()) : $products_bestsellers->the_post();
+                        global $product;
+                        $product_id = get_the_ID();
+                        $product_image = get_the_post_thumbnail_url($product_id, 'medium');
+                        $product_name = get_the_title();
+                        $total_sales = get_post_meta($product_id, 'total_sales', true);
+                        ?>
+                            <div class="frame-slide-tabs">
+                                <div class="frame-slide-tabs-content">
+                                    <?php if ($product_image) : ?>
+                                        <div class="frame-slide-tabs-image">
+                                            <img src="<?php echo esc_url($product_image); ?>" alt="<?php echo esc_attr($product_name); ?>">
+                                            <span class="bestseller-badge">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
+                                                </svg>
+                                                <?php _e('TOP', 'kraftiart'); ?>
+                                            </span>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="frame-slide-tabs-name">
+                                        <h3><?php echo esc_html($product_name); ?></h3>
+                                    </div>
+                                </div>
+                            </div>
+                    <?php endwhile;
+                endif;
+                wp_reset_postdata();
+                ?>
+            </div>
+            
+            <button class="frame-carousel-tabs-nav frame-carousel-tabs-prev" data-carousel="bestsellers" aria-label="Previous slide">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="frame-carousel-tabs-nav frame-carousel-tabs-next" data-carousel="bestsellers" aria-label="Next slide">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            
+            <div class="frame-carousel-tabs-dots" data-carousel="bestsellers"></div>
+        </div>
+    </div>
+    
+    <style>
+    /* Force visibility on all devices */
+    .<?php echo esc_attr($carousel_id); ?> .frame-carousel-tabs-nav {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 9999 !important;
+    }
+    
+    .frame-carousel-tabs-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        isolation: isolate;
+    }
+    
+    /* Tabs Navigation */
+    .frame-tabs-nav {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .frame-tab-btn {
+        padding: 12px 28px;
+        border: 2px solid rgba(236, 72, 153, 0.3);
+        background: rgba(253, 242, 248, 0.5);
+        border-radius: 30px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #ec4899;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .frame-tab-btn svg {
+        transition: transform 0.3s ease;
+    }
+    
+    .frame-tab-btn:hover {
+        border-color: #ec4899;
+        background: rgba(252, 231, 243, 0.8);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+    }
+    
+    .frame-tab-btn.active {
+        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        color: #fff;
+        border-color: transparent;
+        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35);
+    }
+    
+    .frame-tab-btn.active svg {
+        transform: scale(1.1);
+    }
+    
+    .frame-tab-btn:active {
+        transform: translateY(0) scale(0.96);
+    }
+    
+    /* Tab Content */
+    .frame-tab-content {
+        display: none;
+        position: relative;
+        padding: 0 16px 80px;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .frame-tab-content.active {
+        display: block;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .frame-carousel-tabs-track {
+        display: flex;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
+        align-items: stretch;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .frame-slide-tabs {
+        flex: 0 0 100%;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        display: flex;
+    }
+    
+    .frame-slide-tabs-content {
+        background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(236, 72, 153, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        height: 100%;
+        z-index: 1;
+    }
+    
+    .frame-slide-tabs-content:active {
+        transform: scale(0.98);
+        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .frame-slide-tabs-image {
+        width: 100%;
+        height: 300px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .frame-slide-tabs-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .frame-slide-tabs-content:active .frame-slide-tabs-image img {
+        transform: scale(1.05);
+    }
+    
+    .new-badge {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        color: #fff;
+        font-weight: 700;
+        font-size: 12px;
+        letter-spacing: 1px;
+        padding: 6px 14px;
+        border-radius: 20px;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        z-index: 10;
+        animation: bounce 2s infinite;
+    }
+    
+    .bestseller-badge {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        color: #fff;
+        font-weight: 700;
+        font-size: 12px;
+        letter-spacing: 1px;
+        padding: 6px 14px;
+        border-radius: 20px;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-5px);
+        }
+    }
+    
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+    
+    .frame-slide-tabs-name {
+        padding: 20px 24px;
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    .frame-slide-tabs-name h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #ec4899;
+        text-align: center;
+        line-height: 1.4;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    }
+    
+    .frame-carousel-tabs-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 100 !important;
+        padding: 0;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        width: 48px;
+        height: 48px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.9);
+        pointer-events: auto;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .frame-carousel-tabs-prev {
+        left: 16px;
+    }
+    
+    .frame-carousel-tabs-next {
+        right: 16px;
+    }
+    
+    .frame-carousel-tabs-nav:active {
+        transform: translateY(-50%) scale(0.88);
+        box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+    
+    .frame-carousel-tabs-nav svg {
+        width: 22px !important;
+        height: 22px !important;
+        color: #fff !important;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)) !important;
+        display: block !important;
+    }
+    
+    .frame-carousel-tabs-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex !important;
+        gap: 8px;
+        z-index: 9999 !important;
+        pointer-events: auto;
+        visibility: visible !important;
+    }
+    
+    .frame-carousel-tabs-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(236, 72, 153, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        padding: 0;
+    }
+    
+    .frame-carousel-tabs-dot.active {
+        width: 24px;
+        border-radius: 4px;
+        background: linear-gradient(135deg, #ec4899, #f472b6);
+    }
+    
+    /* Desktop optimizations */
+    @media (min-width: 768px) {
+        .frame-carousel-tabs-track {
+            min-height: 440px;
+        }
+        
+        .frame-slide-tabs {
+            min-height: 440px;
+        }
+        
+        .frame-slide-tabs-image {
+            height: 360px;
+        }
+        
+        .frame-slide-tabs-name h3 {
+            font-size: 22px;
+        }
+        
+        .frame-tab-btn {
+            font-size: 18px;
+            padding: 14px 32px;
+        }
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 767px) {
+        .frame-carousel-tabs-nav {
+            width: 40px !important;
+            height: 40px !important;
+            box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .frame-carousel-tabs-prev {
+            left: 8px !important;
+        }
+        
+        .frame-carousel-tabs-next {
+            right: 8px !important;
+        }
+        
+        .frame-carousel-tabs-nav svg {
+            width: 18px !important;
+            height: 18px !important;
+        }
+        
+        .frame-tab-content {
+            padding: 0 16px 70px;
+        }
+        
+        .frame-carousel-tabs-track {
+            min-height: 340px;
+        }
+        
+        .frame-slide-tabs {
+            min-height: 340px;
+        }
+        
+        .frame-slide-tabs-image {
+            height: 260px;
+        }
+        
+        .frame-slide-tabs-content {
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .frame-slide-tabs-name {
+            padding: 16px 20px;
+        }
+        
+        .frame-slide-tabs-name h3 {
+            font-size: 16px;
+        }
+        
+        .new-badge,
+        .bestseller-badge {
+            top: 12px;
+            right: 12px;
+            font-size: 11px;
+            padding: 5px 12px;
+        }
+        
+        .frame-carousel-tabs-dots {
+            bottom: 30px;
+        }
+        
+        .frame-carousel-tabs-dot {
+            width: 10px;
+            height: 10px;
+        }
+        
+        .frame-carousel-tabs-dot.active {
+            width: 28px;
+        }
+        
+        .frame-tab-btn {
+            font-size: 14px;
+            padding: 10px 20px;
+        }
+        
+        .frame-tab-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .frame-tabs-nav {
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+    }
+    
+    /* Extra small mobile devices */
+    @media (max-width: 374px) {
+        .frame-tab-content {
+            padding: 0 12px 70px;
+        }
+        
+        .frame-carousel-tabs-track {
+            min-height: 300px;
+        }
+        
+        .frame-slide-tabs {
+            min-height: 300px;
+        }
+        
+        .frame-slide-tabs-image {
+            height: 220px;
+        }
+        
+        .frame-carousel-tabs-nav {
+            width: 36px !important;
+            height: 36px !important;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .frame-carousel-tabs-prev {
+            left: 4px !important;
+        }
+        
+        .frame-carousel-tabs-next {
+            right: 4px !important;
+        }
+        
+        .frame-carousel-tabs-nav svg {
+            width: 16px !important;
+            height: 16px !important;
+        }
+        
+        .frame-slide-tabs-name h3 {
+            font-size: 15px;
+        }
+        
+        .frame-tab-btn {
+            font-size: 13px;
+            padding: 8px 16px;
+        }
+    }
+    </style>
+    
+    <script>
+    (function() {
+        function initFrameCarouselTabs() {
+            const wrapper = document.querySelector('.<?php echo esc_js($carousel_id); ?>');
+            if (!wrapper) return;
+            
+            const tabBtns = wrapper.querySelectorAll('.frame-tab-btn');
+            const tabContents = wrapper.querySelectorAll('.frame-tab-content');
+            
+            // Carousel instances storage
+            const carousels = {};
+            
+            // Initialize each carousel
+            function initCarousel(carouselType) {
+                const tabContent = wrapper.querySelector(`[data-content="${carouselType}"]`);
+                if (!tabContent) return;
+                
+                const track = tabContent.querySelector('.frame-carousel-tabs-track');
+                const slides = Array.from(track.querySelectorAll('.frame-slide-tabs'));
+                const prevBtn = tabContent.querySelector('.frame-carousel-tabs-prev');
+                const nextBtn = tabContent.querySelector('.frame-carousel-tabs-next');
+                const dotsContainer = tabContent.querySelector('.frame-carousel-tabs-dots');
+                
+                if (!track || slides.length === 0) return;
+                
+                let currentIndex = 0;
+                let autoplayInterval = null;
+                let touchStartX = 0;
+                let touchEndX = 0;
+                
+                // Create dots
+                dotsContainer.innerHTML = '';
+                slides.forEach((_, index) => {
+                    const dot = document.createElement('button');
+                    dot.className = 'frame-carousel-tabs-dot';
+                    dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+                    if (index === 0) dot.classList.add('active');
+                    dot.addEventListener('click', () => goToSlide(index));
+                    dotsContainer.appendChild(dot);
+                });
+                
+                const dots = Array.from(dotsContainer.querySelectorAll('.frame-carousel-tabs-dot'));
+                
+                function updateCarousel() {
+                    const offset = -currentIndex * 100;
+                    track.style.transform = `translateX(${offset}%)`;
+                    
+                    // Update dots
+                    dots.forEach((dot, index) => {
+                        dot.classList.toggle('active', index === currentIndex);
+                    });
+                }
+                
+                function goToSlide(index) {
+                    currentIndex = index;
+                    updateCarousel();
+                    resetAutoplay();
+                }
+                
+                function nextSlide() {
+                    currentIndex = (currentIndex + 1) % slides.length;
+                    updateCarousel();
+                }
+                
+                function prevSlide() {
+                    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                    updateCarousel();
+                }
+                
+                function startAutoplay() {
+                    const autoplay = wrapper.getAttribute('data-autoplay') === 'true';
+                    const delay = parseInt(wrapper.getAttribute('data-delay')) || 4000;
+                    
+                    if (autoplay && tabContent.classList.contains('active')) {
+                        autoplayInterval = setInterval(nextSlide, delay);
+                    }
+                }
+                
+                function stopAutoplay() {
+                    if (autoplayInterval) {
+                        clearInterval(autoplayInterval);
+                        autoplayInterval = null;
+                    }
+                }
+                
+                function resetAutoplay() {
+                    stopAutoplay();
+                    startAutoplay();
+                }
+                
+                // Touch events
+                track.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                    stopAutoplay();
+                }, { passive: true });
+                
+                track.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                    startAutoplay();
+                }, { passive: true });
+                
+                function handleSwipe() {
+                    const swipeThreshold = 50;
+                    const diff = touchStartX - touchEndX;
+                    
+                    if (Math.abs(diff) > swipeThreshold) {
+                        if (diff > 0) {
+                            nextSlide();
+                        } else {
+                            prevSlide();
+                        }
+                    }
+                }
+                
+                // Button events
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => {
+                        nextSlide();
+                        resetAutoplay();
+                    });
+                }
+                
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        prevSlide();
+                        resetAutoplay();
+                    });
+                }
+                
+                // Keyboard navigation
+                tabContent.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') {
+                        prevSlide();
+                        resetAutoplay();
+                    } else if (e.key === 'ArrowRight') {
+                        nextSlide();
+                        resetAutoplay();
+                    }
+                });
+                
+                // Pause on hover (desktop only)
+                if (window.innerWidth >= 768) {
+                    tabContent.addEventListener('mouseenter', stopAutoplay);
+                    tabContent.addEventListener('mouseleave', startAutoplay);
+                }
+                
+                // Store carousel instance
+                carousels[carouselType] = {
+                    updateCarousel,
+                    startAutoplay,
+                    stopAutoplay,
+                    resetAutoplay
+                };
+                
+                // Initialize
+                updateCarousel();
+                if (tabContent.classList.contains('active')) {
+                    startAutoplay();
+                }
+            }
+            
+            // Tab switching
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabName = btn.getAttribute('data-tab');
+                    
+                    // Stop all carousels
+                    Object.values(carousels).forEach(carousel => {
+                        if (carousel.stopAutoplay) carousel.stopAutoplay();
+                    });
+                    
+                    // Update active states
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    btn.classList.add('active');
+                    const targetContent = wrapper.querySelector(`[data-content="${tabName}"]`);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                        
+                        // Start autoplay for active carousel
+                        if (carousels[tabName] && carousels[tabName].startAutoplay) {
+                            carousels[tabName].startAutoplay();
+                        }
+                    }
+                });
+            });
+            
+            // Initialize both carousels
+            initCarousel('new');
+            initCarousel('bestsellers');
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initFrameCarouselTabs);
+        } else {
+            initFrameCarouselTabs();
+        }
+    })();
+    </script>
+    
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('frame_carousel_tabs', 'frame_carousel_tabs_shortcode');
