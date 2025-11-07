@@ -3714,16 +3714,6 @@ function frame_carousel_tabs_shortcode($atts) {
         'order' => 'DESC',
     );
     
-    // Query best selling products
-    $args_bestsellers = array(
-        'post_type' => 'product',
-        'posts_per_page' => intval($atts['posts_per_page']),
-        'post_status' => 'publish',
-        'meta_key' => 'total_sales',
-        'orderby' => 'meta_value_num',
-        'order' => 'DESC',
-    );
-    
     // Add category filter if specified
     if (!empty($atts['category'])) {
         $tax_query = array(
@@ -3734,13 +3724,11 @@ function frame_carousel_tabs_shortcode($atts) {
             )
         );
         $args_new['tax_query'] = $tax_query;
-        $args_bestsellers['tax_query'] = $tax_query;
     }
     
     $products_new = new WP_Query($args_new);
-    $products_bestsellers = new WP_Query($args_bestsellers);
     
-    if (!$products_new->have_posts() && !$products_bestsellers->have_posts()) {
+    if (!$products_new->have_posts()) {
         return '<p>' . __('No products found.', 'kraftiart') . '</p>';
     }
     
@@ -3751,22 +3739,6 @@ function frame_carousel_tabs_shortcode($atts) {
     ?>
     
     <div class="frame-carousel-tabs-wrapper <?php echo esc_attr($carousel_id); ?>" data-autoplay="<?php echo esc_attr($atts['autoplay']); ?>" data-delay="<?php echo esc_attr($atts['autoplay_delay']); ?>">
-        <!-- Tabs Navigation -->
-        <div class="frame-tabs-nav">
-            <button class="frame-tab-btn active" data-tab="new">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 5V19M5 12L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                <?php _e('Nuevos', 'kraftiart'); ?>
-            </button>
-            <button class="frame-tab-btn" data-tab="bestsellers">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
-                </svg>
-                <?php _e('Más Vendidos', 'kraftiart'); ?>
-            </button>
-        </div>
-        
         <!-- Tab Content: New Products -->
         <div class="frame-tab-content active" data-content="new">
             <div class="frame-carousel-tabs-track" data-carousel="new">
@@ -3809,56 +3781,6 @@ function frame_carousel_tabs_shortcode($atts) {
             </button>
             
             <div class="frame-carousel-tabs-dots" data-carousel="new"></div>
-        </div>
-        
-        <!-- Tab Content: Best Sellers -->
-        <div class="frame-tab-content" data-content="bestsellers">
-            <div class="frame-carousel-tabs-track" data-carousel="bestsellers">
-                <?php 
-                if ($products_bestsellers->have_posts()) :
-                    while ($products_bestsellers->have_posts()) : $products_bestsellers->the_post();
-                        global $product;
-                        $product_id = get_the_ID();
-                        $product_image = get_the_post_thumbnail_url($product_id, 'medium');
-                        $product_name = get_the_title();
-                        $total_sales = get_post_meta($product_id, 'total_sales', true);
-                        ?>
-                            <div class="frame-slide-tabs">
-                                <div class="frame-slide-tabs-content">
-                                    <?php if ($product_image) : ?>
-                                        <div class="frame-slide-tabs-image">
-                                            <img src="<?php echo esc_url($product_image); ?>" alt="<?php echo esc_attr($product_name); ?>">
-                                            <span class="bestseller-badge">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
-                                                </svg>
-                                                <?php _e('TOP', 'kraftiart'); ?>
-                                            </span>
-                                        </div>
-                                    <?php endif; ?>
-                                    <div class="frame-slide-tabs-name">
-                                        <h3><?php echo esc_html($product_name); ?></h3>
-                                    </div>
-                                </div>
-                            </div>
-                    <?php endwhile;
-                endif;
-                wp_reset_postdata();
-                ?>
-            </div>
-            
-            <button class="frame-carousel-tabs-nav frame-carousel-tabs-prev" data-carousel="bestsellers" aria-label="Previous slide">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-            <button class="frame-carousel-tabs-nav frame-carousel-tabs-next" data-carousel="bestsellers" aria-label="Next slide">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-            
-            <div class="frame-carousel-tabs-dots" data-carousel="bestsellers"></div>
         </div>
     </div>
     
@@ -3968,7 +3890,6 @@ function frame_carousel_tabs_shortcode($atts) {
         align-items: stretch;
         position: relative;
         z-index: 1;
-        gap: 20px;
     }
     
     .frame-slide-tabs {
@@ -3981,6 +3902,10 @@ function frame_carousel_tabs_shortcode($atts) {
     
     /* Desktop: 3 slides per view */
     @media (min-width: 768px) {
+        .frame-carousel-tabs-track {
+            gap: 20px;
+        }
+        
         .frame-slide-tabs {
             flex: 0 0 calc((100% - 40px) / 3);
             width: calc((100% - 40px) / 3);
@@ -4566,36 +4491,8 @@ function frame_carousel_tabs_shortcode($atts) {
                 }
             }
             
-            // Tab switching
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const tabName = btn.getAttribute('data-tab');
-                    
-                    // Stop all carousels
-                    Object.values(carousels).forEach(carousel => {
-                        if (carousel.stopAutoplay) carousel.stopAutoplay();
-                    });
-                    
-                    // Update active states
-                    tabBtns.forEach(b => b.classList.remove('active'));
-                    tabContents.forEach(c => c.classList.remove('active'));
-                    
-                    btn.classList.add('active');
-                    const targetContent = wrapper.querySelector(`[data-content="${tabName}"]`);
-                    if (targetContent) {
-                        targetContent.classList.add('active');
-                        
-                        // Start autoplay for active carousel
-                        if (carousels[tabName] && carousels[tabName].startAutoplay) {
-                            carousels[tabName].startAutoplay();
-                        }
-                    }
-                });
-            });
-            
-            // Initialize both carousels
+            // Initialize only the new products carousel
             initCarousel('new');
-            initCarousel('bestsellers');
         }
         
         if (document.readyState === 'loading') {
