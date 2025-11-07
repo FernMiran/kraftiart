@@ -4610,3 +4610,712 @@ function frame_carousel_tabs_shortcode($atts) {
     return ob_get_clean();
 }
 add_shortcode('frame_carousel_tabs', 'frame_carousel_tabs_shortcode');
+
+/**
+ * Frame Carousel Blog Posts - Blog Posts Carousel
+ * Usage: [frame_carousel_blog posts_per_page="10"]
+ */
+function frame_carousel_blog_shortcode($atts) {
+    // Parse shortcode attributes
+    $atts = shortcode_atts(array(
+        'posts_per_page' => '10',
+        'autoplay' => 'true',
+        'autoplay_delay' => '4000',
+        'category' => '', // Blog category slug
+    ), $atts);
+    
+    // Query blog posts
+    $args = array(
+        'post_type' => 'post',
+        'posts_per_page' => intval($atts['posts_per_page']),
+        'post_status' => 'publish',
+        'orderby' => 'date',
+        'order' => 'DESC',
+    );
+    
+    // Add category filter if specified
+    if (!empty($atts['category'])) {
+        $args['category_name'] = $atts['category'];
+    }
+    
+    $posts_query = new WP_Query($args);
+    
+    if (!$posts_query->have_posts()) {
+        return '<p>' . __('No blog posts found.', 'kraftiart') . '</p>';
+    }
+    
+    // Generate unique ID for this carousel instance
+    $carousel_id = 'frame-carousel-blog-' . uniqid();
+    
+    ob_start();
+    ?>
+    
+    <div class="frame-carousel-blog-wrapper <?php echo esc_attr($carousel_id); ?>" data-autoplay="<?php echo esc_attr($atts['autoplay']); ?>" data-delay="<?php echo esc_attr($atts['autoplay_delay']); ?>">
+        <div class="frame-carousel-blog-track">
+            <?php 
+            while ($posts_query->have_posts()) : $posts_query->the_post();
+                $post_id = get_the_ID();
+                $featured_image = get_the_post_thumbnail_url($post_id, 'medium');
+                $title = get_the_title();
+                $excerpt = get_the_excerpt();
+                $post_date = get_the_date('M d, Y');
+                $author = get_the_author();
+                $categories = get_the_category();
+                $post_link = get_permalink();
+                ?>
+                    <div class="frame-slide-blog">
+                        <a href="<?php echo esc_url($post_link); ?>" class="frame-slide-blog-content">
+                            <?php if ($featured_image) : ?>
+                                <div class="frame-slide-blog-image">
+                                    <img src="<?php echo esc_url($featured_image); ?>" alt="<?php echo esc_attr($title); ?>">
+                                    <div class="frame-blog-overlay"></div>
+                                </div>
+                            <?php endif; ?>
+                            <div class="frame-slide-blog-info">
+                                <?php if (!empty($categories)) : ?>
+                                    <span class="frame-blog-category"><?php echo esc_html($categories[0]->name); ?></span>
+                                <?php endif; ?>
+                                <h3 class="frame-blog-title"><?php echo esc_html($title); ?></h3>
+                                <?php if ($excerpt) : ?>
+                                    <p class="frame-blog-excerpt"><?php echo wp_trim_words($excerpt, 15, '...'); ?></p>
+                                <?php endif; ?>
+                                <div class="frame-blog-meta">
+                                    <span class="frame-blog-author">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <?php echo esc_html($author); ?>
+                                    </span>
+                                    <span class="frame-blog-date">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                                            <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/>
+                                        </svg>
+                                        <?php echo esc_html($post_date); ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+            <?php endwhile; 
+            wp_reset_postdata();
+            ?>
+        </div>
+        
+        <button class="frame-carousel-blog-nav frame-carousel-blog-prev" aria-label="Previous slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <button class="frame-carousel-blog-nav frame-carousel-blog-next" aria-label="Next slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        
+        <div class="frame-carousel-blog-dots"></div>
+    </div>
+    
+    <style>
+    /* Force visibility on all devices */
+    .<?php echo esc_attr($carousel_id); ?> .frame-carousel-blog-nav {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 9999 !important;
+    }
+    
+    .frame-carousel-blog-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        padding: 0 16px 80px;
+        margin: 0;
+        background: transparent;
+        isolation: isolate;
+    }
+    
+    .frame-carousel-blog-track {
+        display: flex;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
+        align-items: stretch;
+        position: relative;
+        z-index: 1;
+        gap: 20px;
+    }
+    
+    .frame-slide-blog {
+        flex: 0 0 100%;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        display: flex;
+    }
+    
+    .frame-slide-blog-content {
+        background: linear-gradient(135deg, #f8f4f5 0%, #f3e5e8 100%);
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(114, 47, 55, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        height: 100%;
+        z-index: 1;
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .frame-slide-blog-content:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 50px rgba(114, 47, 55, 0.25), 0 6px 16px rgba(0, 0, 0, 0.12);
+        border-color: #722f37;
+    }
+    
+    .frame-slide-blog-content:active {
+        transform: translateY(-4px) scale(0.98);
+    }
+    
+    .frame-slide-blog-image {
+        width: 100%;
+        height: 240px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .frame-slide-blog-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .frame-slide-blog-content:hover .frame-slide-blog-image img {
+        transform: scale(1.08);
+    }
+    
+    .frame-blog-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .frame-slide-blog-content:hover .frame-blog-overlay {
+        opacity: 1;
+    }
+    
+    .frame-slide-blog-info {
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        flex: 1;
+    }
+    
+    .frame-blog-category {
+        display: inline-block;
+        background: linear-gradient(135deg, #722f37 0%, #8b3a45 100%);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 6px 14px;
+        border-radius: 20px;
+        align-self: flex-start;
+        box-shadow: 0 2px 8px rgba(114, 47, 55, 0.3);
+    }
+    
+    .frame-blog-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+        color: #722f37;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        transition: color 0.3s ease;
+    }
+    
+    .frame-slide-blog-content:hover .frame-blog-title {
+        color: #8b3a45;
+    }
+    
+    .frame-blog-excerpt {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+        line-height: 1.6;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .frame-blog-meta {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-top: auto;
+        padding-top: 12px;
+        border-top: 1px solid rgba(114, 47, 55, 0.1);
+        font-size: 13px;
+        color: #888;
+    }
+    
+    .frame-blog-author,
+    .frame-blog-date {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .frame-blog-meta svg {
+        opacity: 0.7;
+    }
+    
+    .frame-carousel-blog-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 100 !important;
+        padding: 0;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        width: 48px;
+        height: 48px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 50%;
+        background: linear-gradient(135deg, #722f37 0%, #8b3a45 100%);
+        box-shadow: 0 6px 20px rgba(114, 47, 55, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.9);
+        pointer-events: auto;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .frame-carousel-blog-prev {
+        left: 16px;
+    }
+    
+    .frame-carousel-blog-next {
+        right: 16px;
+    }
+    
+    .frame-carousel-blog-nav:active {
+        transform: translateY(-50%) scale(0.88);
+        box-shadow: 0 4px 14px rgba(114, 47, 55, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+    
+    .frame-carousel-blog-nav svg {
+        width: 22px !important;
+        height: 22px !important;
+        color: #fff !important;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)) !important;
+        display: block !important;
+    }
+    
+    .frame-carousel-blog-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex !important;
+        gap: 8px;
+        z-index: 9999 !important;
+        pointer-events: auto;
+        visibility: visible !important;
+    }
+    
+    .frame-carousel-blog-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(114, 47, 55, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        padding: 0;
+    }
+    
+    .frame-carousel-blog-dot.active {
+        width: 24px;
+        border-radius: 4px;
+        background: linear-gradient(135deg, #722f37, #8b3a45);
+    }
+    
+    /* Desktop: 3 slides per view */
+    @media (min-width: 768px) {
+        .frame-slide-blog {
+            flex: 0 0 calc((100% - 40px) / 3);
+            width: calc((100% - 40px) / 3);
+            max-width: calc((100% - 40px) / 3);
+        }
+        
+        .frame-carousel-blog-wrapper {
+            padding: 0 60px 80px;
+        }
+        
+        .frame-carousel-blog-track {
+            min-height: 480px;
+        }
+        
+        .frame-slide-blog {
+            min-height: 480px;
+        }
+        
+        .frame-slide-blog-image {
+            height: 200px;
+        }
+        
+        .frame-blog-title {
+            font-size: 18px;
+        }
+        
+        .frame-slide-blog-info {
+            padding: 20px;
+        }
+    }
+    
+    /* Large desktop */
+    @media (min-width: 1024px) {
+        .frame-slide-blog-image {
+            height: 220px;
+        }
+        
+        .frame-blog-title {
+            font-size: 19px;
+        }
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 767px) {
+        .frame-carousel-blog-nav {
+            width: 40px !important;
+            height: 40px !important;
+            box-shadow: 0 4px 16px rgba(114, 47, 55, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .frame-carousel-blog-prev {
+            left: 8px !important;
+        }
+        
+        .frame-carousel-blog-next {
+            right: 8px !important;
+        }
+        
+        .frame-carousel-blog-nav svg {
+            width: 18px !important;
+            height: 18px !important;
+        }
+        
+        .frame-carousel-blog-wrapper {
+            padding: 0 16px 70px;
+        }
+        
+        .frame-carousel-blog-track {
+            min-height: 440px;
+        }
+        
+        .frame-slide-blog {
+            min-height: 440px;
+        }
+        
+        .frame-slide-blog-content {
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(114, 47, 55, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .frame-slide-blog-image {
+            height: 220px;
+        }
+        
+        .frame-slide-blog-info {
+            padding: 20px;
+        }
+        
+        .frame-blog-title {
+            font-size: 18px;
+        }
+        
+        .frame-blog-excerpt {
+            font-size: 13px;
+        }
+        
+        .frame-carousel-blog-dots {
+            bottom: 30px;
+        }
+        
+        .frame-carousel-blog-dot {
+            width: 10px;
+            height: 10px;
+        }
+        
+        .frame-carousel-blog-dot.active {
+            width: 28px;
+        }
+    }
+    
+    /* Extra small mobile devices */
+    @media (max-width: 374px) {
+        .frame-carousel-blog-wrapper {
+            padding: 0 12px 70px;
+        }
+        
+        .frame-carousel-blog-track {
+            min-height: 420px;
+        }
+        
+        .frame-slide-blog {
+            min-height: 420px;
+        }
+        
+        .frame-slide-blog-image {
+            height: 200px;
+        }
+        
+        .frame-carousel-blog-nav {
+            width: 36px !important;
+            height: 36px !important;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .frame-carousel-blog-prev {
+            left: 4px !important;
+        }
+        
+        .frame-carousel-blog-next {
+            right: 4px !important;
+        }
+        
+        .frame-carousel-blog-nav svg {
+            width: 16px !important;
+            height: 16px !important;
+        }
+        
+        .frame-blog-title {
+            font-size: 17px;
+        }
+        
+        .frame-slide-blog-info {
+            padding: 18px;
+        }
+    }
+    </style>
+    
+    <script>
+    (function() {
+        function initFrameCarouselBlog() {
+            const wrapper = document.querySelector('.<?php echo esc_js($carousel_id); ?>');
+            if (!wrapper) return;
+            
+            const track = wrapper.querySelector('.frame-carousel-blog-track');
+            const slides = Array.from(track.querySelectorAll('.frame-slide-blog'));
+            const prevBtn = wrapper.querySelector('.frame-carousel-blog-prev');
+            const nextBtn = wrapper.querySelector('.frame-carousel-blog-next');
+            const dotsContainer = wrapper.querySelector('.frame-carousel-blog-dots');
+            
+            if (!track || slides.length === 0) return;
+            
+            let currentIndex = 0;
+            let autoplayInterval = null;
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            // Create dots
+            slides.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = 'frame-carousel-blog-dot';
+                dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(index));
+                dotsContainer.appendChild(dot);
+            });
+            
+            const dots = Array.from(dotsContainer.querySelectorAll('.frame-carousel-blog-dot'));
+            
+            function updateCarousel() {
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
+                const gap = isDesktop ? (20 / slides.length) : 0;
+                const offset = -currentIndex * (slideWidth + gap);
+                
+                track.style.transform = `translateX(${offset}%)`;
+                
+                // Update dots
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+            }
+            
+            function goToSlide(index) {
+                currentIndex = index;
+                updateCarousel();
+                resetAutoplay();
+            }
+            
+            function nextSlide() {
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const maxIndex = Math.max(0, slides.length - slidesToShow);
+                
+                if (isDesktop && slides.length > slidesToShow) {
+                    // Infinite loop on desktop
+                    currentIndex = currentIndex + 1;
+                    if (currentIndex > maxIndex) {
+                        currentIndex = 0;
+                    }
+                } else {
+                    currentIndex = (currentIndex + 1) % slides.length;
+                }
+                updateCarousel();
+            }
+            
+            function prevSlide() {
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const maxIndex = Math.max(0, slides.length - slidesToShow);
+                
+                if (isDesktop && slides.length > slidesToShow) {
+                    // Infinite loop on desktop
+                    currentIndex = currentIndex - 1;
+                    if (currentIndex < 0) {
+                        currentIndex = maxIndex;
+                    }
+                } else {
+                    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                }
+                updateCarousel();
+            }
+            
+            function startAutoplay() {
+                const autoplay = wrapper.getAttribute('data-autoplay') === 'true';
+                const delay = parseInt(wrapper.getAttribute('data-delay')) || 4000;
+                
+                if (autoplay) {
+                    autoplayInterval = setInterval(nextSlide, delay);
+                }
+            }
+            
+            function stopAutoplay() {
+                if (autoplayInterval) {
+                    clearInterval(autoplayInterval);
+                    autoplayInterval = null;
+                }
+            }
+            
+            function resetAutoplay() {
+                stopAutoplay();
+                startAutoplay();
+            }
+            
+            // Touch events
+            track.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                stopAutoplay();
+            }, { passive: true });
+            
+            track.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+                startAutoplay();
+            }, { passive: true });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                }
+            }
+            
+            // Button events
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    nextSlide();
+                    resetAutoplay();
+                });
+            }
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    prevSlide();
+                    resetAutoplay();
+                });
+            }
+            
+            // Keyboard navigation
+            wrapper.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                    resetAutoplay();
+                } else if (e.key === 'ArrowRight') {
+                    nextSlide();
+                    resetAutoplay();
+                }
+            });
+            
+            // Pause on hover (desktop only)
+            if (window.innerWidth >= 768) {
+                wrapper.addEventListener('mouseenter', stopAutoplay);
+                wrapper.addEventListener('mouseleave', startAutoplay);
+            }
+            
+            // Handle window resize
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    currentIndex = 0;
+                    updateCarousel();
+                }, 250);
+            });
+            
+            // Initialize
+            updateCarousel();
+            startAutoplay();
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initFrameCarouselBlog);
+        } else {
+            initFrameCarouselBlog();
+        }
+    })();
+    </script>
+    
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('frame_carousel_blog', 'frame_carousel_blog_shortcode');
