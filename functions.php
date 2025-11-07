@@ -1092,9 +1092,9 @@ function frame_carousel_shortcode($atts) {
         display: flex;
     }
     .frame-slide-content {
-        background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+        background: linear-gradient(135deg, #f8f4f5 0%, #f3e5e8 100%);
         border-radius: 24px;
-        box-shadow: 0 10px 40px rgba(236, 72, 153, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 10px 40px rgba(114, 47, 55, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
         overflow: hidden;
         position: relative;
         width: 100%;
@@ -1108,7 +1108,7 @@ function frame_carousel_shortcode($atts) {
     
     .frame-slide-content:active {
         transform: scale(0.97);
-        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 30px rgba(114, 47, 55, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
     }
     
     .frame-slide-image {
@@ -1117,7 +1117,7 @@ function frame_carousel_shortcode($atts) {
         border-radius: 50%;
         overflow: hidden;
         border: 5px solid #fff;
-        box-shadow: 0 8px 24px rgba(236, 72, 153, 0.25), 0 4px 12px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 24px rgba(114, 47, 55, 0.25), 0 4px 12px rgba(0, 0, 0, 0.1);
         margin: 32px auto 24px;
         position: relative;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1128,7 +1128,7 @@ function frame_carousel_shortcode($atts) {
         position: absolute;
         inset: -5px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #ec4899, #f472b6);
+        background: linear-gradient(135deg, #722f37, #8b3a45);
         opacity: 0;
         z-index: -1;
         transition: opacity 0.3s ease;
@@ -1136,7 +1136,7 @@ function frame_carousel_shortcode($atts) {
     
     .frame-slide-image:active {
         transform: scale(0.92);
-        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.3), 0 3px 10px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 6px 20px rgba(114, 47, 55, 0.3), 0 3px 10px rgba(0, 0, 0, 0.12);
     }
     
     .frame-slide-image:active::before {
@@ -1161,7 +1161,7 @@ function frame_carousel_shortcode($atts) {
     .frame-slide-category {
         font-size: 12px;
         font-weight: 600;
-        color: #ec4899;
+        color: #722f37;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-bottom: 8px;
@@ -1175,7 +1175,7 @@ function frame_carousel_shortcode($atts) {
         text-align: center;
         letter-spacing: -0.02em;
         text-shadow: 0 2px 4px rgba(131, 24, 67, 0.1);
-        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        background: linear-gradient(135deg, #722f37 0%, #8b3a45 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -1209,8 +1209,8 @@ function frame_carousel_shortcode($atts) {
         height: 48px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-radius: 50%;
-        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
-        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, #722f37 0%, #8b3a45 100%);
+        box-shadow: 0 6px 20px rgba(114, 47, 55, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
         cursor: pointer;
         outline: none;
         -webkit-tap-highlight-color: transparent;
@@ -1230,7 +1230,7 @@ function frame_carousel_shortcode($atts) {
     
     .frame-carousel-nav:active {
         transform: translateY(-50%) scale(0.88);
-        box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 4px 14px rgba(114, 47, 55, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
     }
     
     .frame-carousel-nav svg {
@@ -1257,7 +1257,7 @@ function frame_carousel_shortcode($atts) {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: rgba(236, 72, 153, 0.3);
+        background: rgba(114, 47, 55, 0.3);
         cursor: pointer;
         transition: all 0.3s ease;
         border: none;
@@ -1267,7 +1267,7 @@ function frame_carousel_shortcode($atts) {
     .frame-carousel-dot.active {
         width: 24px;
         border-radius: 4px;
-        background: linear-gradient(135deg, #ec4899, #f472b6);
+        background: linear-gradient(135deg, #722f37, #8b3a45);
     }
     
     /* Desktop optimizations */
@@ -1283,7 +1283,7 @@ function frame_carousel_shortcode($atts) {
         .frame-carousel-nav {
             width: 40px !important;
             height: 40px !important;
-            box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 0 4px 16px rgba(114, 47, 55, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
             display: flex !important;
             visibility: visible !important;
             opacity: 1 !important;
@@ -1317,14 +1317,14 @@ function frame_carousel_shortcode($atts) {
         
         .frame-slide-content {
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(114, 47, 55, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .frame-slide-image {
             width: 88px;
             height: 88px;
             border-width: 4px;
-            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.28), 0 3px 10px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 6px 20px rgba(114, 47, 55, 0.28), 0 3px 10px rgba(0, 0, 0, 0.12);
             margin: 28px auto 20px;
             flex-shrink: 0;
         }
@@ -1684,9 +1684,9 @@ function frame_carousel_simple_shortcode($atts) {
     }
     
     .frame-slide-simple-content {
-        background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+        background: linear-gradient(135deg, #f8f4f5 0%, #f3e5e8 100%);
         border-radius: 24px;
-        box-shadow: 0 10px 40px rgba(236, 72, 153, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 10px 40px rgba(114, 47, 55, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
         overflow: hidden;
         position: relative;
         width: 100%;
@@ -1700,7 +1700,7 @@ function frame_carousel_simple_shortcode($atts) {
     
     .frame-slide-simple-content:active {
         transform: scale(0.98);
-        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 30px rgba(114, 47, 55, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
     }
     
     .frame-slide-simple-image {
@@ -1736,8 +1736,8 @@ function frame_carousel_simple_shortcode($atts) {
         height: 48px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-radius: 50%;
-        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
-        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, #722f37 0%, #8b3a45 100%);
+        box-shadow: 0 6px 20px rgba(114, 47, 55, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
         cursor: pointer;
         outline: none;
         -webkit-tap-highlight-color: transparent;
@@ -1757,7 +1757,7 @@ function frame_carousel_simple_shortcode($atts) {
     
     .frame-carousel-simple-nav:active {
         transform: translateY(-50%) scale(0.88);
-        box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 4px 14px rgba(114, 47, 55, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
     }
     
     .frame-carousel-simple-nav svg {
@@ -1784,7 +1784,7 @@ function frame_carousel_simple_shortcode($atts) {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: rgba(236, 72, 153, 0.3);
+        background: rgba(114, 47, 55, 0.3);
         cursor: pointer;
         transition: all 0.3s ease;
         border: none;
@@ -1794,7 +1794,7 @@ function frame_carousel_simple_shortcode($atts) {
     .frame-carousel-simple-dot.active {
         width: 24px;
         border-radius: 4px;
-        background: linear-gradient(135deg, #ec4899, #f472b6);
+        background: linear-gradient(135deg, #722f37, #8b3a45);
     }
     
     /* Desktop optimizations */
@@ -1817,7 +1817,7 @@ function frame_carousel_simple_shortcode($atts) {
         .frame-carousel-simple-nav {
             width: 40px !important;
             height: 40px !important;
-            box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 0 4px 16px rgba(114, 47, 55, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
             display: flex !important;
             visibility: visible !important;
             opacity: 1 !important;
@@ -1851,7 +1851,7 @@ function frame_carousel_simple_shortcode($atts) {
         
         .frame-slide-simple-content {
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(114, 47, 55, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .frame-carousel-simple-dots {
@@ -2200,9 +2200,9 @@ function frame_carousel_sale_shortcode($atts) {
     }
     
     .frame-slide-sale-content {
-        background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+        background: linear-gradient(135deg, #f8f4f5 0%, #f3e5e8 100%);
         border-radius: 24px;
-        box-shadow: 0 10px 40px rgba(236, 72, 153, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 10px 40px rgba(114, 47, 55, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
         overflow: hidden;
         position: relative;
         width: 100%;
@@ -2216,7 +2216,7 @@ function frame_carousel_sale_shortcode($atts) {
     
     .frame-slide-sale-content:active {
         transform: scale(0.98);
-        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 30px rgba(114, 47, 55, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
     }
     
     .frame-slide-sale-image {
@@ -2274,7 +2274,7 @@ function frame_carousel_sale_shortcode($atts) {
         margin: 0;
         font-size: 18px;
         font-weight: 600;
-        color: #ec4899;
+        color: #722f37;
         text-align: center;
         line-height: 1.4;
         text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
@@ -2294,8 +2294,8 @@ function frame_carousel_sale_shortcode($atts) {
         height: 48px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-radius: 50%;
-        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
-        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, #722f37 0%, #8b3a45 100%);
+        box-shadow: 0 6px 20px rgba(114, 47, 55, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
         cursor: pointer;
         outline: none;
         -webkit-tap-highlight-color: transparent;
@@ -2315,7 +2315,7 @@ function frame_carousel_sale_shortcode($atts) {
     
     .frame-carousel-sale-nav:active {
         transform: translateY(-50%) scale(0.88);
-        box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 4px 14px rgba(114, 47, 55, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
     }
     
     .frame-carousel-sale-nav svg {
@@ -2342,7 +2342,7 @@ function frame_carousel_sale_shortcode($atts) {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: rgba(236, 72, 153, 0.3);
+        background: rgba(114, 47, 55, 0.3);
         cursor: pointer;
         transition: all 0.3s ease;
         border: none;
@@ -2352,7 +2352,7 @@ function frame_carousel_sale_shortcode($atts) {
     .frame-carousel-sale-dot.active {
         width: 24px;
         border-radius: 4px;
-        background: linear-gradient(135deg, #ec4899, #f472b6);
+        background: linear-gradient(135deg, #722f37, #8b3a45);
     }
     
     /* Desktop optimizations */
@@ -2383,7 +2383,7 @@ function frame_carousel_sale_shortcode($atts) {
         .frame-carousel-sale-nav {
             width: 40px !important;
             height: 40px !important;
-            box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 0 4px 16px rgba(114, 47, 55, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
             display: flex !important;
             visibility: visible !important;
             opacity: 1 !important;
@@ -2421,7 +2421,7 @@ function frame_carousel_sale_shortcode($atts) {
         
         .frame-slide-sale-content {
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(114, 47, 55, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .frame-slide-sale-name {
@@ -2814,8 +2814,8 @@ function frame_carousel_fullsize_shortcode($atts) {
         height: 48px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-radius: 50%;
-        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
-        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, #722f37 0%, #8b3a45 100%);
+        box-shadow: 0 6px 20px rgba(114, 47, 55, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
         cursor: pointer;
         outline: none;
         -webkit-tap-highlight-color: transparent;
@@ -2835,7 +2835,7 @@ function frame_carousel_fullsize_shortcode($atts) {
     
     .frame-carousel-fullsize-nav:active {
         transform: translateY(-50%) scale(0.88);
-        box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 4px 14px rgba(114, 47, 55, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
     }
     
     .frame-carousel-fullsize-nav svg {
@@ -2862,7 +2862,7 @@ function frame_carousel_fullsize_shortcode($atts) {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: rgba(236, 72, 153, 0.3);
+        background: rgba(114, 47, 55, 0.3);
         cursor: pointer;
         transition: all 0.3s ease;
         border: none;
@@ -2872,7 +2872,7 @@ function frame_carousel_fullsize_shortcode($atts) {
     .frame-carousel-fullsize-dot.active {
         width: 24px;
         border-radius: 4px;
-        background: linear-gradient(135deg, #ec4899, #f472b6);
+        background: linear-gradient(135deg, #722f37, #8b3a45);
     }
     
     /* Desktop optimizations */
@@ -2887,7 +2887,7 @@ function frame_carousel_fullsize_shortcode($atts) {
         .frame-carousel-fullsize-nav {
             width: 40px !important;
             height: 40px !important;
-            box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 0 4px 16px rgba(114, 47, 55, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
             display: flex !important;
             visibility: visible !important;
             opacity: 1 !important;
@@ -3235,9 +3235,9 @@ function frame_carousel_new_shortcode($atts) {
     }
     
     .frame-slide-new-content {
-        background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+        background: linear-gradient(135deg, #f8f4f5 0%, #f3e5e8 100%);
         border-radius: 24px;
-        box-shadow: 0 10px 40px rgba(236, 72, 153, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 10px 40px rgba(114, 47, 55, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
         overflow: hidden;
         position: relative;
         width: 100%;
@@ -3251,7 +3251,7 @@ function frame_carousel_new_shortcode($atts) {
     
     .frame-slide-new-content:active {
         transform: scale(0.98);
-        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 30px rgba(114, 47, 55, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
     }
     
     .frame-slide-new-image {
@@ -3309,7 +3309,7 @@ function frame_carousel_new_shortcode($atts) {
         margin: 0;
         font-size: 18px;
         font-weight: 600;
-        color: #ec4899;
+        color: #722f37;
         text-align: center;
         line-height: 1.4;
         text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
@@ -3329,8 +3329,8 @@ function frame_carousel_new_shortcode($atts) {
         height: 48px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-radius: 50%;
-        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
-        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, #722f37 0%, #8b3a45 100%);
+        box-shadow: 0 6px 20px rgba(114, 47, 55, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
         cursor: pointer;
         outline: none;
         -webkit-tap-highlight-color: transparent;
@@ -3350,7 +3350,7 @@ function frame_carousel_new_shortcode($atts) {
     
     .frame-carousel-new-nav:active {
         transform: translateY(-50%) scale(0.88);
-        box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 4px 14px rgba(114, 47, 55, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
     }
     
     .frame-carousel-new-nav svg {
@@ -3377,7 +3377,7 @@ function frame_carousel_new_shortcode($atts) {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: rgba(236, 72, 153, 0.3);
+        background: rgba(114, 47, 55, 0.3);
         cursor: pointer;
         transition: all 0.3s ease;
         border: none;
@@ -3387,7 +3387,7 @@ function frame_carousel_new_shortcode($atts) {
     .frame-carousel-new-dot.active {
         width: 24px;
         border-radius: 4px;
-        background: linear-gradient(135deg, #ec4899, #f472b6);
+        background: linear-gradient(135deg, #722f37, #8b3a45);
     }
     
     /* Desktop optimizations */
@@ -3418,7 +3418,7 @@ function frame_carousel_new_shortcode($atts) {
         .frame-carousel-new-nav {
             width: 40px !important;
             height: 40px !important;
-            box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 0 4px 16px rgba(114, 47, 55, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
             display: flex !important;
             visibility: visible !important;
             opacity: 1 !important;
@@ -3456,7 +3456,7 @@ function frame_carousel_new_shortcode($atts) {
         
         .frame-slide-new-content {
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(114, 47, 55, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .frame-slide-new-name {
@@ -3897,12 +3897,12 @@ function frame_carousel_tabs_shortcode($atts) {
     
     .frame-tab-btn {
         padding: 12px 28px;
-        border: 2px solid rgba(236, 72, 153, 0.3);
-        background: rgba(253, 242, 248, 0.5);
+        border: 2px solid rgba(114, 47, 55, 0.3);
+        background: rgba(248, 244, 245, 0.5);
         border-radius: 30px;
         font-size: 16px;
         font-weight: 600;
-        color: #ec4899;
+        color: #722f37;
         cursor: pointer;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
@@ -3917,17 +3917,17 @@ function frame_carousel_tabs_shortcode($atts) {
     }
     
     .frame-tab-btn:hover {
-        border-color: #ec4899;
-        background: rgba(252, 231, 243, 0.8);
+        border-color: #722f37;
+        background: rgba(243, 229, 232, 0.8);
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+        box-shadow: 0 4px 12px rgba(114, 47, 55, 0.2);
     }
     
     .frame-tab-btn.active {
-        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        background: linear-gradient(135deg, #722f37 0%, #8b3a45 100%);
         color: #fff;
         border-color: transparent;
-        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35);
+        box-shadow: 0 6px 20px rgba(114, 47, 55, 0.35);
     }
     
     .frame-tab-btn.active svg {
@@ -3989,9 +3989,9 @@ function frame_carousel_tabs_shortcode($atts) {
     }
     
     .frame-slide-tabs-content {
-        background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+        background: linear-gradient(135deg, #f8f4f5 0%, #f3e5e8 100%);
         border-radius: 24px;
-        box-shadow: 0 10px 40px rgba(236, 72, 153, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 10px 40px rgba(114, 47, 55, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
         overflow: hidden;
         position: relative;
         width: 100%;
@@ -4005,7 +4005,7 @@ function frame_carousel_tabs_shortcode($atts) {
     
     .frame-slide-tabs-content:active {
         transform: scale(0.98);
-        box-shadow: 0 8px 30px rgba(236, 72, 153, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 30px rgba(114, 47, 55, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
     }
     
     .frame-slide-tabs-image {
@@ -4091,7 +4091,7 @@ function frame_carousel_tabs_shortcode($atts) {
         margin: 0;
         font-size: 18px;
         font-weight: 600;
-        color: #ec4899;
+        color: #722f37;
         text-align: center;
         line-height: 1.4;
         text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
@@ -4111,8 +4111,8 @@ function frame_carousel_tabs_shortcode($atts) {
         height: 48px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-radius: 50%;
-        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
-        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, #722f37 0%, #8b3a45 100%);
+        box-shadow: 0 6px 20px rgba(114, 47, 55, 0.35), 0 3px 10px rgba(0, 0, 0, 0.1);
         cursor: pointer;
         outline: none;
         -webkit-tap-highlight-color: transparent;
@@ -4132,7 +4132,7 @@ function frame_carousel_tabs_shortcode($atts) {
     
     .frame-carousel-tabs-nav:active {
         transform: translateY(-50%) scale(0.88);
-        box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 4px 14px rgba(114, 47, 55, 0.4), 0 2px 8px rgba(0, 0, 0, 0.12);
     }
     
     .frame-carousel-tabs-nav svg {
@@ -4159,7 +4159,7 @@ function frame_carousel_tabs_shortcode($atts) {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: rgba(236, 72, 153, 0.3);
+        background: rgba(114, 47, 55, 0.3);
         cursor: pointer;
         transition: all 0.3s ease;
         border: none;
@@ -4169,7 +4169,7 @@ function frame_carousel_tabs_shortcode($atts) {
     .frame-carousel-tabs-dot.active {
         width: 24px;
         border-radius: 4px;
-        background: linear-gradient(135deg, #ec4899, #f472b6);
+        background: linear-gradient(135deg, #722f37, #8b3a45);
     }
     
     /* Desktop optimizations */
@@ -4216,7 +4216,7 @@ function frame_carousel_tabs_shortcode($atts) {
         .frame-carousel-tabs-nav {
             width: 40px !important;
             height: 40px !important;
-            box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 0 4px 16px rgba(114, 47, 55, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
             display: flex !important;
             visibility: visible !important;
             opacity: 1 !important;
@@ -4253,7 +4253,7 @@ function frame_carousel_tabs_shortcode($atts) {
         
         .frame-slide-tabs-content {
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(114, 47, 55, 0.18), 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .frame-slide-tabs-name {
