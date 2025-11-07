@@ -4642,7 +4642,6 @@ function frame_carousel_blog_shortcode($atts) {
         align-items: stretch;
         position: relative;
         z-index: 1;
-        gap: 20px;
     }
     
     .frame-slide-blog {
@@ -4863,22 +4862,20 @@ function frame_carousel_blog_shortcode($atts) {
     
     /* Desktop: 3 slides per view */
     @media (min-width: 768px) {
+        .frame-carousel-blog-track {
+            gap: 20px;
+            min-height: 480px;
+        }
+        
         .frame-slide-blog {
             flex: 0 0 calc((100% - 40px) / 3);
             width: calc((100% - 40px) / 3);
             max-width: calc((100% - 40px) / 3);
+            min-height: 480px;
         }
         
         .frame-carousel-blog-wrapper {
             padding: 0 60px 80px;
-        }
-        
-        .frame-carousel-blog-track {
-            min-height: 480px;
-        }
-        
-        .frame-slide-blog {
-            min-height: 480px;
         }
         
         .frame-slide-blog-image {
