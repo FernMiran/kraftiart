@@ -2893,6 +2893,19 @@ function frame_carousel_fullsize_shortcode($atts) {
         align-items: center;
     }
     
+    /* Desktop: 3 slides per view */
+    @media (min-width: 768px) {
+        .frame-carousel-fullsize-track {
+            gap: 20px;
+        }
+        
+        .frame-slide-fullsize {
+            flex: 0 0 calc((100% - 40px) / 3);
+            width: calc((100% - 40px) / 3);
+            max-width: calc((100% - 40px) / 3);
+        }
+    }
+    
     .frame-slide-fullsize-content {
         width: 100%;
         height: auto;
@@ -3106,7 +3119,12 @@ function frame_carousel_fullsize_shortcode($atts) {
             const dots = Array.from(dotsContainer.querySelectorAll('.frame-carousel-fullsize-dot'));
             
             function updateCarousel() {
-                const offset = -currentIndex * 100;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
+                const gap = isDesktop ? (20 / slides.length) : 0;
+                const offset = -currentIndex * (slideWidth + gap);
+                
                 track.style.transform = `translateX(${offset}%)`;
                 
                 // Update dots
@@ -3122,12 +3140,34 @@ function frame_carousel_fullsize_shortcode($atts) {
             }
             
             function nextSlide() {
-                currentIndex = (currentIndex + 1) % slides.length;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const maxIndex = Math.max(0, slides.length - slidesToShow);
+                
+                if (isDesktop && slides.length > slidesToShow) {
+                    currentIndex = currentIndex + 1;
+                    if (currentIndex > maxIndex) {
+                        currentIndex = 0;
+                    }
+                } else {
+                    currentIndex = (currentIndex + 1) % slides.length;
+                }
                 updateCarousel();
             }
             
             function prevSlide() {
-                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const maxIndex = Math.max(0, slides.length - slidesToShow);
+                
+                if (isDesktop && slides.length > slidesToShow) {
+                    currentIndex = currentIndex - 1;
+                    if (currentIndex < 0) {
+                        currentIndex = maxIndex;
+                    }
+                } else {
+                    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                }
                 updateCarousel();
             }
             
