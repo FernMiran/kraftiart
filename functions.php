@@ -1091,6 +1091,20 @@ function frame_carousel_shortcode($atts) {
         box-sizing: border-box;
         display: flex;
     }
+    
+    /* Desktop: 3 slides per view */
+    @media (min-width: 768px) {
+        .frame-carousel-track {
+            gap: 20px;
+        }
+        
+        .frame-slide {
+            flex: 0 0 calc((100% - 40px) / 3);
+            width: calc((100% - 40px) / 3);
+            max-width: calc((100% - 40px) / 3);
+        }
+    }
+    
     .frame-slide-content {
         background: linear-gradient(135deg, #f8f4f5 0%, #f3e5e8 100%);
         border-radius: 24px;
@@ -1444,7 +1458,12 @@ function frame_carousel_shortcode($atts) {
             const dots = Array.from(dotsContainer.querySelectorAll('.frame-carousel-dot'));
             
             function updateCarousel() {
-                const offset = -currentIndex * 100;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
+                const gap = isDesktop ? (20 / slides.length) : 0;
+                const offset = -currentIndex * (slideWidth + gap);
+                
                 track.style.transform = `translateX(${offset}%)`;
                 
                 // Update dots
@@ -1460,12 +1479,34 @@ function frame_carousel_shortcode($atts) {
             }
             
             function nextSlide() {
-                currentIndex = (currentIndex + 1) % slides.length;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const maxIndex = Math.max(0, slides.length - slidesToShow);
+                
+                if (isDesktop && slides.length > slidesToShow) {
+                    currentIndex = currentIndex + 1;
+                    if (currentIndex > maxIndex) {
+                        currentIndex = 0;
+                    }
+                } else {
+                    currentIndex = (currentIndex + 1) % slides.length;
+                }
                 updateCarousel();
             }
             
             function prevSlide() {
-                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const maxIndex = Math.max(0, slides.length - slidesToShow);
+                
+                if (isDesktop && slides.length > slidesToShow) {
+                    currentIndex = currentIndex - 1;
+                    if (currentIndex < 0) {
+                        currentIndex = maxIndex;
+                    }
+                } else {
+                    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                }
                 updateCarousel();
             }
             
@@ -1681,6 +1722,19 @@ function frame_carousel_simple_shortcode($atts) {
         max-width: 100%;
         box-sizing: border-box;
         display: flex;
+    }
+    
+    /* Desktop: 3 slides per view */
+    @media (min-width: 768px) {
+        .frame-carousel-simple-track {
+            gap: 20px;
+        }
+        
+        .frame-slide-simple {
+            flex: 0 0 calc((100% - 40px) / 3);
+            width: calc((100% - 40px) / 3);
+            max-width: calc((100% - 40px) / 3);
+        }
     }
     
     .frame-slide-simple-content {
@@ -1943,7 +1997,12 @@ function frame_carousel_simple_shortcode($atts) {
             const dots = Array.from(dotsContainer.querySelectorAll('.frame-carousel-simple-dot'));
             
             function updateCarousel() {
-                const offset = -currentIndex * 100;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
+                const gap = isDesktop ? (20 / slides.length) : 0;
+                const offset = -currentIndex * (slideWidth + gap);
+                
                 track.style.transform = `translateX(${offset}%)`;
                 
                 // Update dots
@@ -1959,12 +2018,34 @@ function frame_carousel_simple_shortcode($atts) {
             }
             
             function nextSlide() {
-                currentIndex = (currentIndex + 1) % slides.length;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const maxIndex = Math.max(0, slides.length - slidesToShow);
+                
+                if (isDesktop && slides.length > slidesToShow) {
+                    currentIndex = currentIndex + 1;
+                    if (currentIndex > maxIndex) {
+                        currentIndex = 0;
+                    }
+                } else {
+                    currentIndex = (currentIndex + 1) % slides.length;
+                }
                 updateCarousel();
             }
             
             function prevSlide() {
-                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const maxIndex = Math.max(0, slides.length - slidesToShow);
+                
+                if (isDesktop && slides.length > slidesToShow) {
+                    currentIndex = currentIndex - 1;
+                    if (currentIndex < 0) {
+                        currentIndex = maxIndex;
+                    }
+                } else {
+                    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                }
                 updateCarousel();
             }
             
@@ -2197,6 +2278,19 @@ function frame_carousel_sale_shortcode($atts) {
         max-width: 100%;
         box-sizing: border-box;
         display: flex;
+    }
+    
+    /* Desktop: 3 slides per view */
+    @media (min-width: 768px) {
+        .frame-carousel-sale-track {
+            gap: 20px;
+        }
+        
+        .frame-slide-sale {
+            flex: 0 0 calc((100% - 40px) / 3);
+            width: calc((100% - 40px) / 3);
+            max-width: calc((100% - 40px) / 3);
+        }
     }
     
     .frame-slide-sale-content {
@@ -2531,7 +2625,12 @@ function frame_carousel_sale_shortcode($atts) {
             const dots = Array.from(dotsContainer.querySelectorAll('.frame-carousel-sale-dot'));
             
             function updateCarousel() {
-                const offset = -currentIndex * 100;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
+                const gap = isDesktop ? (20 / slides.length) : 0;
+                const offset = -currentIndex * (slideWidth + gap);
+                
                 track.style.transform = `translateX(${offset}%)`;
                 
                 // Update dots
@@ -2547,12 +2646,34 @@ function frame_carousel_sale_shortcode($atts) {
             }
             
             function nextSlide() {
-                currentIndex = (currentIndex + 1) % slides.length;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const maxIndex = Math.max(0, slides.length - slidesToShow);
+                
+                if (isDesktop && slides.length > slidesToShow) {
+                    currentIndex = currentIndex + 1;
+                    if (currentIndex > maxIndex) {
+                        currentIndex = 0;
+                    }
+                } else {
+                    currentIndex = (currentIndex + 1) % slides.length;
+                }
                 updateCarousel();
             }
             
             function prevSlide() {
-                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const maxIndex = Math.max(0, slides.length - slidesToShow);
+                
+                if (isDesktop && slides.length > slidesToShow) {
+                    currentIndex = currentIndex - 1;
+                    if (currentIndex < 0) {
+                        currentIndex = maxIndex;
+                    }
+                } else {
+                    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                }
                 updateCarousel();
             }
             
@@ -3233,6 +3354,19 @@ function frame_carousel_new_shortcode($atts) {
         display: flex;
     }
     
+    /* Desktop: 3 slides per view */
+    @media (min-width: 768px) {
+        .frame-carousel-new-track {
+            gap: 20px;
+        }
+        
+        .frame-slide-new {
+            flex: 0 0 calc((100% - 40px) / 3);
+            width: calc((100% - 40px) / 3);
+            max-width: calc((100% - 40px) / 3);
+        }
+    }
+    
     .frame-slide-new-content {
         background: linear-gradient(135deg, #f8f4f5 0%, #f3e5e8 100%);
         border-radius: 24px;
@@ -3565,7 +3699,12 @@ function frame_carousel_new_shortcode($atts) {
             const dots = Array.from(dotsContainer.querySelectorAll('.frame-carousel-new-dot'));
             
             function updateCarousel() {
-                const offset = -currentIndex * 100;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
+                const gap = isDesktop ? (20 / slides.length) : 0;
+                const offset = -currentIndex * (slideWidth + gap);
+                
                 track.style.transform = `translateX(${offset}%)`;
                 
                 // Update dots
@@ -3581,12 +3720,34 @@ function frame_carousel_new_shortcode($atts) {
             }
             
             function nextSlide() {
-                currentIndex = (currentIndex + 1) % slides.length;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const maxIndex = Math.max(0, slides.length - slidesToShow);
+                
+                if (isDesktop && slides.length > slidesToShow) {
+                    currentIndex = currentIndex + 1;
+                    if (currentIndex > maxIndex) {
+                        currentIndex = 0;
+                    }
+                } else {
+                    currentIndex = (currentIndex + 1) % slides.length;
+                }
                 updateCarousel();
             }
             
             function prevSlide() {
-                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                const isDesktop = window.innerWidth >= 768;
+                const slidesToShow = isDesktop ? 3 : 1;
+                const maxIndex = Math.max(0, slides.length - slidesToShow);
+                
+                if (isDesktop && slides.length > slidesToShow) {
+                    currentIndex = currentIndex - 1;
+                    if (currentIndex < 0) {
+                        currentIndex = maxIndex;
+                    }
+                } else {
+                    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                }
                 updateCarousel();
             }
             
@@ -4648,6 +4809,19 @@ function frame_carousel_blog_shortcode($atts) {
         max-width: 100%;
         box-sizing: border-box;
         display: flex;
+    }
+    
+    /* Desktop: 3 slides per view */
+    @media (min-width: 768px) {
+        .frame-carousel-blog-track {
+            gap: 20px;
+        }
+        
+        .frame-slide-blog {
+            flex: 0 0 calc((100% - 40px) / 3);
+            width: calc((100% - 40px) / 3);
+            max-width: calc((100% - 40px) / 3);
+        }
     }
     
     .frame-slide-blog-content {
