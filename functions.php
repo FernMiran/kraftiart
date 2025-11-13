@@ -1460,11 +1460,21 @@ function frame_carousel_shortcode($atts) {
             function updateCarousel() {
                 const isDesktop = window.innerWidth >= 768;
                 const slidesToShow = isDesktop ? 3 : 1;
-                const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
-                const gap = isDesktop ? (20 / slides.length) : 0;
-                const offset = -currentIndex * (slideWidth + gap);
                 
-                track.style.transform = `translateX(${offset}%)`;
+                if (isDesktop && slidesToShow === 3) {
+                    // Each slide is calc((100% - 40px) / 3) with 20px gap
+                    // Calculate actual pixel values to get accurate percentages
+                    const containerWidth = track.parentElement.offsetWidth;
+                    const gapInPercent = (20 / containerWidth) * 100;
+                    const slideWidth = (100 - (40 / containerWidth) * 100) / 3;
+                    const slideWidthWithGap = slideWidth + gapInPercent;
+                    const offset = -currentIndex * slideWidthWithGap;
+                    track.style.transform = `translateX(${offset}%)`;
+                } else {
+                    // Mobile: simple 100% per slide
+                    const offset = -currentIndex * 100;
+                    track.style.transform = `translateX(${offset}%)`;
+                }
                 
                 // Update dots
                 dots.forEach((dot, index) => {
@@ -1999,11 +2009,21 @@ function frame_carousel_simple_shortcode($atts) {
             function updateCarousel() {
                 const isDesktop = window.innerWidth >= 768;
                 const slidesToShow = isDesktop ? 3 : 1;
-                const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
-                const gap = isDesktop ? (20 / slides.length) : 0;
-                const offset = -currentIndex * (slideWidth + gap);
                 
-                track.style.transform = `translateX(${offset}%)`;
+                if (isDesktop && slidesToShow === 3) {
+                    // Each slide is calc((100% - 40px) / 3) with 20px gap
+                    // Calculate actual pixel values to get accurate percentages
+                    const containerWidth = track.parentElement.offsetWidth;
+                    const gapInPercent = (20 / containerWidth) * 100;
+                    const slideWidth = (100 - (40 / containerWidth) * 100) / 3;
+                    const slideWidthWithGap = slideWidth + gapInPercent;
+                    const offset = -currentIndex * slideWidthWithGap;
+                    track.style.transform = `translateX(${offset}%)`;
+                } else {
+                    // Mobile: simple 100% per slide
+                    const offset = -currentIndex * 100;
+                    track.style.transform = `translateX(${offset}%)`;
+                }
                 
                 // Update dots
                 dots.forEach((dot, index) => {
@@ -2624,11 +2644,21 @@ function frame_carousel_sale_shortcode($atts) {
             function updateCarousel() {
                 const isDesktop = window.innerWidth >= 768;
                 const slidesToShow = isDesktop ? 3 : 1;
-                const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
-                const gap = isDesktop ? (20 / slides.length) : 0;
-                const offset = -currentIndex * (slideWidth + gap);
                 
-                track.style.transform = `translateX(${offset}%)`;
+                if (isDesktop && slidesToShow === 3) {
+                    // Each slide is calc((100% - 40px) / 3) with 20px gap
+                    // Calculate actual pixel values to get accurate percentages
+                    const containerWidth = track.parentElement.offsetWidth;
+                    const gapInPercent = (20 / containerWidth) * 100;
+                    const slideWidth = (100 - (40 / containerWidth) * 100) / 3;
+                    const slideWidthWithGap = slideWidth + gapInPercent;
+                    const offset = -currentIndex * slideWidthWithGap;
+                    track.style.transform = `translateX(${offset}%)`;
+                } else {
+                    // Mobile: simple 100% per slide
+                    const offset = -currentIndex * 100;
+                    track.style.transform = `translateX(${offset}%)`;
+                }
                 
                 // Update dots
                 dots.forEach((dot, index) => {
@@ -3118,11 +3148,21 @@ function frame_carousel_fullsize_shortcode($atts) {
             function updateCarousel() {
                 const isDesktop = window.innerWidth >= 768;
                 const slidesToShow = isDesktop ? 3 : 1;
-                const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
-                const gap = isDesktop ? (20 / slides.length) : 0;
-                const offset = -currentIndex * (slideWidth + gap);
                 
-                track.style.transform = `translateX(${offset}%)`;
+                if (isDesktop && slidesToShow === 3) {
+                    // Each slide is calc((100% - 40px) / 3) with 20px gap
+                    // Calculate actual pixel values to get accurate percentages
+                    const containerWidth = track.parentElement.offsetWidth;
+                    const gapInPercent = (20 / containerWidth) * 100;
+                    const slideWidth = (100 - (40 / containerWidth) * 100) / 3;
+                    const slideWidthWithGap = slideWidth + gapInPercent;
+                    const offset = -currentIndex * slideWidthWithGap;
+                    track.style.transform = `translateX(${offset}%)`;
+                } else {
+                    // Mobile: simple 100% per slide
+                    const offset = -currentIndex * 100;
+                    track.style.transform = `translateX(${offset}%)`;
+                }
                 
                 // Update dots
                 dots.forEach((dot, index) => {
@@ -3738,11 +3778,21 @@ function frame_carousel_new_shortcode($atts) {
             function updateCarousel() {
                 const isDesktop = window.innerWidth >= 768;
                 const slidesToShow = isDesktop ? 3 : 1;
-                const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
-                const gap = isDesktop ? (20 / slides.length) : 0;
-                const offset = -currentIndex * (slideWidth + gap);
                 
-                track.style.transform = `translateX(${offset}%)`;
+                if (isDesktop && slidesToShow === 3) {
+                    // Each slide is calc((100% - 40px) / 3) with 20px gap
+                    // Calculate actual pixel values to get accurate percentages
+                    const containerWidth = track.parentElement.offsetWidth;
+                    const gapInPercent = (20 / containerWidth) * 100;
+                    const slideWidth = (100 - (40 / containerWidth) * 100) / 3;
+                    const slideWidthWithGap = slideWidth + gapInPercent;
+                    const offset = -currentIndex * slideWidthWithGap;
+                    track.style.transform = `translateX(${offset}%)`;
+                } else {
+                    // Mobile: simple 100% per slide
+                    const offset = -currentIndex * 100;
+                    track.style.transform = `translateX(${offset}%)`;
+                }
                 
                 // Update dots
                 dots.forEach((dot, index) => {
@@ -4532,11 +4582,17 @@ function frame_carousel_tabs_shortcode($atts) {
                 function updateCarousel() {
                     const isDesktop = window.innerWidth >= 768;
                     const slidesToShow = isDesktop ? 3 : 1;
-                    const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
-                    const gap = isDesktop ? (20 / slides.length) : 0;
-                    const offset = -currentIndex * (slideWidth + gap);
                     
-                    track.style.transform = `translateX(${offset}%)`;
+                    if (isDesktop && slidesToShow === 3) {
+                        // On desktop with 3 slides, each slide takes 33.333% + gap
+                        const slideWidthWithGap = (100 + (20 * 2 / 3)) / 3; // ~34%
+                        const offset = -currentIndex * slideWidthWithGap;
+                        track.style.transform = `translateX(${offset}%)`;
+                    } else {
+                        // Mobile: simple 100% per slide
+                        const offset = -currentIndex * 100;
+                        track.style.transform = `translateX(${offset}%)`;
+                    }
                     
                     // Update dots
                     dots.forEach((dot, index) => {
@@ -5265,11 +5321,21 @@ function frame_carousel_blog_shortcode($atts) {
             function updateCarousel() {
                 const isDesktop = window.innerWidth >= 768;
                 const slidesToShow = isDesktop ? 3 : 1;
-                const slideWidth = isDesktop ? (100 / slidesToShow) : 100;
-                const gap = isDesktop ? (20 / slides.length) : 0;
-                const offset = -currentIndex * (slideWidth + gap);
                 
-                track.style.transform = `translateX(${offset}%)`;
+                if (isDesktop && slidesToShow === 3) {
+                    // Each slide is calc((100% - 40px) / 3) with 20px gap
+                    // Calculate actual pixel values to get accurate percentages
+                    const containerWidth = track.parentElement.offsetWidth;
+                    const gapInPercent = (20 / containerWidth) * 100;
+                    const slideWidth = (100 - (40 / containerWidth) * 100) / 3;
+                    const slideWidthWithGap = slideWidth + gapInPercent;
+                    const offset = -currentIndex * slideWidthWithGap;
+                    track.style.transform = `translateX(${offset}%)`;
+                } else {
+                    // Mobile: simple 100% per slide
+                    const offset = -currentIndex * 100;
+                    track.style.transform = `translateX(${offset}%)`;
+                }
                 
                 // Update dots
                 dots.forEach((dot, index) => {
