@@ -2214,9 +2214,6 @@ function frame_carousel_sale_shortcode($atts) {
                             <?php if ($product_image) : ?>
                                 <div class="frame-slide-sale-image">
                                     <img src="<?php echo esc_url($product_image); ?>" alt="<?php echo esc_attr($product_name); ?>">
-                                    <?php if ($sale_badge) : ?>
-                                        <span class="sale-badge"><?php _e('SALE', 'kraftiart'); ?></span>
-                                    <?php endif; ?>
                                 </div>
                             <?php endif; ?>
                             <div class="frame-slide-sale-name">
