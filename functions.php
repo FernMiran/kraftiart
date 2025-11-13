@@ -3170,7 +3170,6 @@ function frame_carousel_new_shortcode($atts) {
                             <?php if ($product_image) : ?>
                                 <div class="frame-slide-new-image">
                                     <img src="<?php echo esc_url($product_image); ?>" alt="<?php echo esc_attr($product_name); ?>">
-                                    <span class="new-badge"><?php _e('NEW', 'kraftiart'); ?></span>
                                 </div>
                             <?php endif; ?>
                             <div class="frame-slide-new-name">
@@ -3755,7 +3754,6 @@ function frame_carousel_tabs_shortcode($atts) {
                                     <?php if ($product_image) : ?>
                                         <div class="frame-slide-tabs-image">
                                             <img src="<?php echo esc_url($product_image); ?>" alt="<?php echo esc_attr($product_name); ?>">
-                                            <span class="new-badge"><?php _e('NEW', 'kraftiart'); ?></span>
                                         </div>
                                     <?php endif; ?>
                                     <div class="frame-slide-tabs-name">
