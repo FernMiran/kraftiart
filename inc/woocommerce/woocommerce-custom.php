@@ -471,7 +471,7 @@ add_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_template_loo
 function woocommerce_template_loop_stock() {
     global $product;
     if ( ! $product->managing_stock() && ! $product->is_in_stock() )
-        echo '<p class="stock out-of-stock">'.esc_html__( 'Sold Out', 'kraftiart' ).'</p>';
+        echo '<p class="stock out-of-stock">'.esc_html__( 'Agotado', 'kraftiart' ).'</p>';
 }
 
 /**

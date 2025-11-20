@@ -933,7 +933,7 @@ msgstr ""
 
 #: inc/woocommerce/woocommerce-custom.php:456
 msgid "Sold Out"
-msgstr ""
+msgstr "Agotado"
 
 #: template-parts/content-none.php:33
 msgid ""
