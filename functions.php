@@ -2194,6 +2194,13 @@ function frame_carousel_sale_shortcode($atts) {
         'orderby' => 'date',
         'order' => 'DESC',
         'post__in' => !empty($sale_product_ids) ? $sale_product_ids : array(0), // If no sales, return 0 to show nothing
+        'meta_query' => array(
+            array(
+                'key' => '_stock_status',
+                'value' => 'instock',
+                'compare' => '='
+            )
+        )
     );
     
     // Add category filter if specified
@@ -2227,19 +2234,22 @@ function frame_carousel_sale_shortcode($atts) {
                 $product_id = get_the_ID();
                 $product_image = get_the_post_thumbnail_url($product_id, 'medium');
                 $product_name = get_the_title();
+                $product_link = get_permalink($product_id);
                 $sale_badge = $product->is_on_sale();
                 ?>
                     <div class="frame-slide-sale">
-                        <div class="frame-slide-sale-content">
-                            <?php if ($product_image) : ?>
-                                <div class="frame-slide-sale-image">
-                                    <img src="<?php echo esc_url($product_image); ?>" alt="<?php echo esc_attr($product_name); ?>">
+                        <a href="<?php echo esc_url($product_link); ?>" class="frame-slide-sale-link">
+                            <div class="frame-slide-sale-content">
+                                <?php if ($product_image) : ?>
+                                    <div class="frame-slide-sale-image">
+                                        <img src="<?php echo esc_url($product_image); ?>" alt="<?php echo esc_attr($product_name); ?>">
+                                    </div>
+                                <?php endif; ?>
+                                <div class="frame-slide-sale-name">
+                                    <h3><?php echo esc_html($product_name); ?></h3>
                                 </div>
-                            <?php endif; ?>
-                            <div class="frame-slide-sale-name">
-                                <h3><?php echo esc_html($product_name); ?></h3>
                             </div>
-                        </div>
+                        </a>
                     </div>
             <?php endwhile; 
             wp_reset_postdata();
@@ -2389,6 +2399,24 @@ function frame_carousel_sale_shortcode($atts) {
         text-align: center;
         line-height: 1.4;
         text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    }
+    
+    .frame-slide-sale-link {
+        display: block;
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+    }
+    
+    .frame-slide-sale-link:hover .frame-slide-sale-content {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 50px rgba(114, 47, 55, 0.25), 0 6px 15px rgba(0, 0, 0, 0.12);
+    }
+    
+    .frame-slide-sale-link:hover .frame-slide-sale-image img {
+        transform: scale(1.08);
     }
     
     .frame-carousel-sale-nav {
@@ -3329,6 +3357,13 @@ function frame_carousel_new_shortcode($atts) {
         'post_status' => 'publish',
         'orderby' => 'date',
         'order' => 'DESC',
+        'meta_query' => array(
+            array(
+                'key' => '_stock_status',
+                'value' => 'instock',
+                'compare' => '='
+            )
+        )
     );
     
     // Add category filter if specified
@@ -3362,18 +3397,21 @@ function frame_carousel_new_shortcode($atts) {
                 $product_id = get_the_ID();
                 $product_image = get_the_post_thumbnail_url($product_id, 'medium');
                 $product_name = get_the_title();
+                $product_link = get_permalink($product_id);
                 ?>
                     <div class="frame-slide-new">
-                        <div class="frame-slide-new-content">
-                            <?php if ($product_image) : ?>
-                                <div class="frame-slide-new-image">
-                                    <img src="<?php echo esc_url($product_image); ?>" alt="<?php echo esc_attr($product_name); ?>">
+                        <a href="<?php echo esc_url($product_link); ?>" class="frame-slide-new-link">
+                            <div class="frame-slide-new-content">
+                                <?php if ($product_image) : ?>
+                                    <div class="frame-slide-new-image">
+                                        <img src="<?php echo esc_url($product_image); ?>" alt="<?php echo esc_attr($product_name); ?>">
+                                    </div>
+                                <?php endif; ?>
+                                <div class="frame-slide-new-name">
+                                    <h3><?php echo esc_html($product_name); ?></h3>
                                 </div>
-                            <?php endif; ?>
-                            <div class="frame-slide-new-name">
-                                <h3><?php echo esc_html($product_name); ?></h3>
                             </div>
-                        </div>
+                        </a>
                     </div>
             <?php endwhile; 
             wp_reset_postdata();
@@ -3523,6 +3561,24 @@ function frame_carousel_new_shortcode($atts) {
         text-align: center;
         line-height: 1.4;
         text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    }
+    
+    .frame-slide-new-link {
+        display: block;
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+    }
+    
+    .frame-slide-new-link:hover .frame-slide-new-content {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 50px rgba(114, 47, 55, 0.25), 0 6px 15px rgba(0, 0, 0, 0.12);
+    }
+    
+    .frame-slide-new-link:hover .frame-slide-new-image img {
+        transform: scale(1.08);
     }
     
     .frame-carousel-new-nav {
@@ -3959,6 +4015,13 @@ function frame_carousel_tabs_shortcode($atts) {
         'post_status' => 'publish',
         'orderby' => 'date',
         'order' => 'DESC',
+        'meta_query' => array(
+            array(
+                'key' => '_stock_status',
+                'value' => 'instock',
+                'compare' => '='
+            )
+        )
     );
     
     // Add category filter if specified
@@ -3996,18 +4059,21 @@ function frame_carousel_tabs_shortcode($atts) {
                         $product_id = get_the_ID();
                         $product_image = get_the_post_thumbnail_url($product_id, 'medium');
                         $product_name = get_the_title();
+                        $product_link = get_permalink($product_id);
                         ?>
                             <div class="frame-slide-tabs">
-                                <div class="frame-slide-tabs-content">
-                                    <?php if ($product_image) : ?>
-                                        <div class="frame-slide-tabs-image">
-                                            <img src="<?php echo esc_url($product_image); ?>" alt="<?php echo esc_attr($product_name); ?>">
+                                <a href="<?php echo esc_url($product_link); ?>" class="frame-slide-tabs-link">
+                                    <div class="frame-slide-tabs-content">
+                                        <?php if ($product_image) : ?>
+                                            <div class="frame-slide-tabs-image">
+                                                <img src="<?php echo esc_url($product_image); ?>" alt="<?php echo esc_attr($product_name); ?>">
+                                            </div>
+                                        <?php endif; ?>
+                                        <div class="frame-slide-tabs-name">
+                                            <h3><?php echo esc_html($product_name); ?></h3>
                                         </div>
-                                    <?php endif; ?>
-                                    <div class="frame-slide-tabs-name">
-                                        <h3><?php echo esc_html($product_name); ?></h3>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                     <?php endwhile;
                 endif;
@@ -4266,6 +4332,24 @@ function frame_carousel_tabs_shortcode($atts) {
         text-align: center;
         line-height: 1.4;
         text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    }
+    
+    .frame-slide-tabs-link {
+        display: block;
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+    }
+    
+    .frame-slide-tabs-link:hover .frame-slide-tabs-content {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 50px rgba(114, 47, 55, 0.25), 0 6px 15px rgba(0, 0, 0, 0.12);
+    }
+    
+    .frame-slide-tabs-link:hover .frame-slide-tabs-image img {
+        transform: scale(1.08);
     }
     
     .frame-carousel-tabs-nav {
