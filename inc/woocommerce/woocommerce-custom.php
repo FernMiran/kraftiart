@@ -475,6 +475,55 @@ function woocommerce_template_loop_stock() {
 }
 
 /**
+ * Original/Copia Label
+ */
+add_action( 'woocommerce_before_shop_loop_item_title', 'kraftiart_artwork_type_label', 15 );
+add_action( 'woocommerce_before_single_product_summary', 'kraftiart_artwork_type_label', 15 );
+function kraftiart_artwork_type_label() {
+    global $product;
+    $artwork_type = get_post_meta( $product->get_id(), '_artwork_type', true );
+    
+    if ( ! empty( $artwork_type ) ) {
+        $label_class = ( $artwork_type === 'original' ) ? 'artwork-original' : 'artwork-copia';
+        $label_text = ( $artwork_type === 'original' ) ? esc_html__( 'Original', 'kraftiart' ) : esc_html__( 'Copia', 'kraftiart' );
+        echo '<div class="kraftiart-artwork-type"><span class="' . esc_attr( $label_class ) . '">' . $label_text . '</span></div>';
+    }
+}
+
+/**
+ * Add artwork type field to product
+ */
+add_action( 'woocommerce_product_options_general_product_data', 'kraftiart_add_artwork_type_field' );
+function kraftiart_add_artwork_type_field() {
+    global $post;
+    
+    echo '<div class="options_group">';
+    
+    woocommerce_wp_select( array(
+        'id'      => '_artwork_type',
+        'label'   => __( 'Tipo de Obra', 'kraftiart' ),
+        'options' => array(
+            ''         => __( 'Ninguno', 'kraftiart' ),
+            'original' => __( 'Original', 'kraftiart' ),
+            'copia'    => __( 'Copia', 'kraftiart' )
+        ),
+        'desc_tip'    => true,
+        'description' => __( 'Selecciona si esta obra es original o copia', 'kraftiart' )
+    ) );
+    
+    echo '</div>';
+}
+
+/**
+ * Save artwork type field
+ */
+add_action( 'woocommerce_process_product_meta', 'kraftiart_save_artwork_type_field' );
+function kraftiart_save_artwork_type_field( $post_id ) {
+    $artwork_type = isset( $_POST['_artwork_type'] ) ? sanitize_text_field( $_POST['_artwork_type'] ) : '';
+    update_post_meta( $post_id, '_artwork_type', $artwork_type );
+}
+
+/**
  * Sale with percentage
  */
 add_action( 'woocommerce_before_single_product_summary_pl', 'sale_badge_percentage', 10 );

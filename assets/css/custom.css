@@ -5859,6 +5859,48 @@
 											font-size: 10px;
 										}
 
+										/* Artwork type labels (Original/Copia) */
+										.kraftiart-artwork-type {
+											position: absolute;
+											top: 10px;
+											right: 10px;
+											z-index: 2;
+										}
+
+										.kraftiart-artwork-type span {
+											display: inline-block;
+											padding: 5px 12px;
+											font-size: 11px;
+											font-weight: 600;
+											text-transform: uppercase;
+											letter-spacing: 0.5px;
+											border-radius: 3px;
+											color: var(--white-color-text);
+										}
+
+										.kraftiart-artwork-type .artwork-original {
+											background: #2ecc71;
+											box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3);
+										}
+
+										.kraftiart-artwork-type .artwork-copia {
+											background: #3498db;
+											box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);
+										}
+
+										/* For single product page */
+										.single-product .single-product-image .kraftiart-artwork-type {
+											position: absolute;
+											top: 20px;
+											right: 20px;
+											z-index: 3;
+										}
+
+										.single-product .single-product-image .kraftiart-artwork-type span {
+											font-size: 13px;
+											padding: 8px 16px;
+										}
+
 										.product.outofstock .thumbnail-wrap a.thumbnail-img {
 											opacity: 0.7;
 											-moz-opacity: 0.7;

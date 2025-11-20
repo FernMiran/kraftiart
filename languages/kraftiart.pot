@@ -935,6 +935,26 @@ msgstr ""
 msgid "Sold Out"
 msgstr "Agotado"
 
+#: inc/woocommerce/woocommerce-custom.php:479
+msgid "Original"
+msgstr "Original"
+
+#: inc/woocommerce/woocommerce-custom.php:479
+msgid "Copia"
+msgstr "Copia"
+
+#: inc/woocommerce/woocommerce-custom.php:487
+msgid "Tipo de Obra"
+msgstr "Tipo de Obra"
+
+#: inc/woocommerce/woocommerce-custom.php:490
+msgid "Ninguno"
+msgstr "Ninguno"
+
+#: inc/woocommerce/woocommerce-custom.php:494
+msgid "Selecciona si esta obra es original o copia"
+msgstr "Selecciona si esta obra es original o copia"
+
 #: template-parts/content-none.php:33
 msgid ""
 "Sorry, but nothing matched your search terms. Please try again with some "
