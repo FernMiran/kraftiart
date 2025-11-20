@@ -486,7 +486,13 @@ function kraftiart_artwork_type_label() {
     if ( ! empty( $artwork_type ) ) {
         $label_class = ( $artwork_type === 'original' ) ? 'artwork-original' : 'artwork-copia';
         $label_text = ( $artwork_type === 'original' ) ? esc_html__( 'Original', 'kraftiart' ) : esc_html__( 'Copia', 'kraftiart' );
-        echo '<div class="kraftiart-artwork-type"><span class="' . esc_attr( $label_class ) . '">' . $label_text . '</span></div>';
+        $bg_color = ( $artwork_type === 'original' ) ? '#2ecc71' : '#3498db';
+        
+        echo '<div class="kraftiart-artwork-type" style="position:absolute!important;top:10px!important;right:10px!important;z-index:9!important;opacity:1!important;">';
+        echo '<span class="' . esc_attr( $label_class ) . '" style="display:inline-block!important;padding:6px 14px!important;font-size:11px!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:0.5px!important;border-radius:3px!important;background:' . esc_attr( $bg_color ) . '!important;color:#ffffff!important;line-height:1!important;box-shadow:0 2px 5px rgba(0,0,0,0.2)!important;">';
+        echo $label_text;
+        echo '</span>';
+        echo '</div>';
     }
 }
 

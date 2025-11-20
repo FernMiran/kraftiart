@@ -5860,45 +5860,86 @@
 										}
 
 										/* Artwork type labels (Original/Copia) */
-										.kraftiart-artwork-type {
-											position: absolute;
-											top: 10px;
-											right: 10px;
-											z-index: 2;
+										section.product .kraftiart-artwork-type,
+										.product .kraftiart-artwork-type {
+											position: absolute !important;
+											top: 10px !important;
+											right: 10px !important;
+											left: auto !important;
+											bottom: auto !important;
+											z-index: 9 !important;
+											opacity: 1 !important;
+											visibility: visible !important;
+											transform: none !important;
+											-webkit-transform: none !important;
 										}
 
-										.kraftiart-artwork-type span {
-											display: inline-block;
-											padding: 5px 12px;
-											font-size: 11px;
-											font-weight: 600;
-											text-transform: uppercase;
-											letter-spacing: 0.5px;
-											border-radius: 3px;
-											color: var(--white-color-text);
+										section.product .kraftiart-artwork-type span,
+										.product .kraftiart-artwork-type span {
+											display: inline-block !important;
+											padding: 6px 14px !important;
+											font-size: 11px !important;
+											font-weight: 700 !important;
+											text-transform: uppercase !important;
+											letter-spacing: 0.5px !important;
+											border-radius: 3px !important;
+											-webkit-border-radius: 3px !important;
+											-moz-border-radius: 3px !important;
+											color: #ffffff !important;
+											line-height: 1 !important;
+											margin: 0 !important;
+											transition: all 0.3s ease !important;
+											-webkit-transition: all 0.3s ease !important;
+											-moz-transition: all 0.3s ease !important;
 										}
 
-										.kraftiart-artwork-type .artwork-original {
-											background: #2ecc71;
-											box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3);
+										section.product .kraftiart-artwork-type .artwork-original,
+										.product .kraftiart-artwork-type .artwork-original {
+											background: #2ecc71 !important;
+											background-color: #2ecc71 !important;
+											box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3) !important;
+											-webkit-box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3) !important;
+											-moz-box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3) !important;
 										}
 
-										.kraftiart-artwork-type .artwork-copia {
-											background: #3498db;
-											box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);
+										section.product .kraftiart-artwork-type .artwork-copia,
+										.product .kraftiart-artwork-type .artwork-copia {
+											background: #3498db !important;
+											background-color: #3498db !important;
+											box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3) !important;
+											-webkit-box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3) !important;
+											-moz-box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3) !important;
+										}
+
+										/* Hover effect */
+										section.product:hover .kraftiart-artwork-type .artwork-original,
+										.product:hover .kraftiart-artwork-type .artwork-original {
+											background: #27ae60 !important;
+											background-color: #27ae60 !important;
+										}
+
+										section.product:hover .kraftiart-artwork-type .artwork-copia,
+										.product:hover .kraftiart-artwork-type .artwork-copia {
+											background: #2980b9 !important;
+											background-color: #2980b9 !important;
 										}
 
 										/* For single product page */
-										.single-product .single-product-image .kraftiart-artwork-type {
-											position: absolute;
-											top: 20px;
-											right: 20px;
-											z-index: 3;
+										.single-product .single-product-image .kraftiart-artwork-type,
+										.single-product .product-image .kraftiart-artwork-type {
+											position: absolute !important;
+											top: 20px !important;
+											right: 20px !important;
+											left: auto !important;
+											z-index: 99 !important;
+											opacity: 1 !important;
+											visibility: visible !important;
 										}
 
-										.single-product .single-product-image .kraftiart-artwork-type span {
-											font-size: 13px;
-											padding: 8px 16px;
+										.single-product .single-product-image .kraftiart-artwork-type span,
+										.single-product .product-image .kraftiart-artwork-type span {
+											font-size: 13px !important;
+											padding: 8px 18px !important;
 										}
 
 										.product.outofstock .thumbnail-wrap a.thumbnail-img {
