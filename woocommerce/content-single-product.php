@@ -376,6 +376,17 @@ if ( post_password_required() ) {
 }
 
 @media(max-width:767px){
+	/* Add horizontal margins to container on mobile */
+    .single-product .container {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+    
+    .single-product .single-product-thumb-content {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
 	/* General mobile fixes */
     /* Override any display:none that might hide the add to cart button */
     .single-product .summary .woocommerce-variation-add-to-cart,
@@ -611,6 +622,12 @@ if ( post_password_required() ) {
 }
 
 @media(max-width:480px){
+    /* Add horizontal margins for smaller mobile devices */
+    .single-product .container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+    
     .single-product .single-product-thumbnail .images {
         max-height: none !important;
         overflow: visible !important;
